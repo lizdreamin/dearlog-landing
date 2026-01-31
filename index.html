@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dearlog | Voice-based AI Mental Care</title>
     <style>
+        /* --- 디자인 시스템 --- */
         :root {
             --bg-color: #050505;
             --text-color: #ffffff;
@@ -14,7 +15,9 @@
             --text-gray: #a4b0be;
             --card-bg: rgba(255, 255, 255, 0.05);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -23,13 +26,40 @@
             overflow-x: hidden;
             position: relative;
         }
-        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #050505; overflow: hidden; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; opacity: var(--opacity); }
-        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; } }
+
+        /* ✨ 우주 배경 (별 애니메이션) ✨ */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: #050505;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: var(--opacity);
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; }
+        }
+
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        header { position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 0; }
+
+        /* --- 네비게이션 --- */
+        header {
+            position: fixed;
+            width: 100%; top: 0; z-index: 1000;
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 0;
+        }
         nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
         .logo::before { content: '🌑'; }
@@ -37,26 +67,104 @@
         .nav-links a { color: var(--text-gray); font-size: 0.95rem; font-weight: 500; }
         .nav-links a:hover { color: white; }
         .nav-links a.highlight { color: var(--accent-purple); font-weight: 700; }
-        .cta-area { display: flex; flex-direction: column; align-items: center; margin-top: 40px; gap: 20px; }
-        .release-form { display: flex; gap: 10px; width: 100%; max-width: 450px; }
-        .release-form input { flex: 1; padding: 14px 22px; border-radius: 30px; border: 1px solid rgba(125, 95, 255, 0.4); background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem; outline: none; transition: 0.3s; }
-        .release-form input:focus { border-color: var(--accent-purple); background: rgba(255, 255, 255, 0.12); box-shadow: 0 0 15px rgba(125, 95, 255, 0.2); }
-        .release-form button { padding: 0 28px; border-radius: 30px; border: none; background: var(--accent-purple); color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; white-space: nowrap; }
-        .release-form button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(125, 95, 255, 0.4); }
-        .store-preview { display: flex; gap: 20px; opacity: 0.6; align-items: center; }
-        .store-icon { width: 45px; height: 45px; object-fit: contain; }
-        .hero { padding-top: 160px; text-align: center; background: radial-gradient(circle at center top, rgba(125, 95, 255, 0.15) 0%, transparent 60%); }
+
+        /* --- 이메일 수집 폼 & 스토어 버튼 --- */
+        .cta-area { 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px; 
+            gap: 20px;
+        }
+        .release-form {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .release-form input {
+            flex: 1;
+            padding: 14px 22px;
+            border-radius: 30px;
+            border: 1px solid rgba(125, 95, 255, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .release-form input:focus {
+            border-color: var(--accent-purple);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 15px rgba(125, 95, 255, 0.2);
+        }
+        .release-form button {
+            padding: 0 28px;
+            border-radius: 30px;
+            border: none;
+            background: var(--accent-purple);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .release-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(125, 95, 255, 0.4);
+        }
+
+        /* 스토어 아이콘 스타일 */
+        .store-preview {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .store-icon {
+            width: 50px; height: 50px;
+            object-fit: contain;
+            opacity: 0.8;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .store-icon:hover { opacity: 1; transform: scale(1.1); }
+
+        /* --- 히어로 섹션 --- */
+        .hero {
+            padding-top: 160px;
+            text-align: center;
+            background: radial-gradient(circle at center top, rgba(125, 95, 255, 0.15) 0%, transparent 60%);
+        }
         .hero h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 24px; text-shadow: 0 0 30px rgba(125, 95, 255, 0.5); word-break: keep-all; }
         .hero p { color: var(--text-gray); font-size: 1.3rem; margin-bottom: 20px; word-break: keep-all; }
         .tag { color: var(--accent-purple); font-weight: 700; font-size: 0.9rem; margin-bottom: 16px; display: block; letter-spacing: 2px;}
+
+        /* 📱 폰 프레임 */
         .hero-images { display: flex; justify-content: center; margin-top: 60px; }
-        .single-phone { width: 300px; height: 600px; border-radius: 45px; border: 10px solid #1a1a1a; overflow: hidden; box-shadow: 0 0 80px rgba(125, 95, 255, 0.2), 0 30px 60px rgba(0,0,0,0.8); position: relative; background: #000; animation: vibrate 0.5s linear infinite paused; }
+        .single-phone {
+            width: 300px; height: 600px;
+            border-radius: 45px; border: 10px solid #1a1a1a;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(125, 95, 255, 0.2), 0 30px 60px rgba(0,0,0,0.8);
+            position: relative; background: #000;
+            animation: vibrate 0.5s linear infinite paused; 
+        }
         .single-phone.ringing { animation-play-state: running; border-color: var(--accent-green); }
-        @keyframes vibrate { 0% { transform: translate(0) rotate(0); } 20% { transform: translate(-2px, 2px) rotate(-1deg); } 40% { transform: translate(-2px, -2px) rotate(1deg); } 100% { transform: translate(0) rotate(0); } }
+        @keyframes vibrate {
+            0% { transform: translate(0) rotate(0); }
+            20% { transform: translate(-2px, 2px) rotate(-1deg); }
+            40% { transform: translate(-2px, -2px) rotate(1deg); }
+            100% { transform: translate(0) rotate(0); }
+        }
         .screen-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
         .screen-home { z-index: 1; }
         .screen-call { z-index: 2; transform: translateY(100%); }
         .call-active .screen-call { transform: translateY(0); }
+
+        /* --- 섹션 스타일 --- */
         section { padding: 100px 0; }
         .feature-row { display: flex; align-items: center; gap: 80px; margin-bottom: 140px; }
         .feature-row.reverse { flex-direction: row-reverse; }
@@ -65,12 +173,17 @@
         .feature-text p { color: var(--text-gray); font-size: 1.15rem; line-height: 1.7; word-break: keep-all; }
         .mockup-frame { width: 280px; border-radius: 40px; border: 8px solid #222; overflow: hidden; background: #111; }
         .mockup-frame img { width: 100%; display: block; }
+
+        /* --- 기술 섹션 --- */
+        #technology { background: rgba(11, 11, 18, 0.8); position: relative; border-top: 1px solid rgba(255,255,255,0.05); }
         .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
         .tech-card { background: var(--card-bg); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
         .tech-card h3 { margin: 20px 0 15px; font-size: 1.4rem; }
         .tech-card p { color: var(--text-gray); word-break: keep-all; }
+
         footer { padding: 80px 0; text-align: center; border-top: 1px solid #222; color: #555; background: #020202;}
 
+        /* ✨ 모바일 최적화 ✨ */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.1rem; line-height: 1.3; }
             .hero p { font-size: 1.1rem; }
@@ -84,7 +197,9 @@
     </style>
 </head>
 <body>
+
     <div class="stars" id="starContainer"></div>
+
     <header>
         <div class="container">
             <nav>
@@ -98,24 +213,27 @@
             </nav>
         </div>
     </header>
+
     <main>
         <section id="home" class="hero">
             <div class="container">
                 <span class="tag">AI MENTAL CARE PLATFORM</span>
                 <h1>입력하지 않아도 돼요.<br>그냥 말하기만 하세요.</h1>
                 <p>텍스트보다 쉽고, 상담보다 편안한<br>당신만의 감정 기록이 시작됩니다.</p>
+                
                 <div class="cta-area">
                     <form class="release-form" name="dearlog-launch" method="POST" data-netlify="true">
                         <input type="hidden" name="form-name" value="dearlog-launch" />
                         <input type="email" name="email" placeholder="이메일 주소를 입력해주세요" required>
                         <button type="submit">출시 알림 받기</button>
                     </form>
+                    
                     <div class="store-preview">
-                        <img src="애플아이콘.png" alt="iOS" class="store-icon">
-                        <img src="플스.png" alt="Android" class="store-icon">
-                        <span style="font-size: 0.9rem;">App Store & Play Store 출시 예정</span>
+                        <img src="애플아이콘.png" alt="App Store" class="store-icon" onclick="alert('앱스토어 출시 준비 중입니다!')">
+                        <img src="플스.png" alt="Google Play" class="store-icon" onclick="alert('구글플레이 출시 준비 중입니다!')">
                     </div>
                 </div>
+
                 <div class="hero-images">
                     <div class="single-phone" id="heroPhone">
                         <img src="메인 홈-2.png" alt="홈" class="screen-img screen-home">
@@ -124,6 +242,7 @@
                 </div>
             </div>
         </section>
+
         <section style="text-align: center;">
             <div class="container">
                 <h3 style="font-size: 1.8rem; margin-bottom: 24px; word-break: keep-all;">"오늘 하루 어땠어?"<br>이 한 마디면 충분합니다.</h3>
@@ -135,6 +254,7 @@
                 </p>
             </div>
         </section>
+
         <section id="features">
             <div class="container">
                 <div class="feature-row">
@@ -147,19 +267,85 @@
                         <div class="mockup-frame"><img src="전화 대화중_3.png"></div>
                     </div>
                 </div>
+
                 <div class="feature-row reverse">
                     <div class="feature-text">
-                        <span class="tag">02. AI THERAPY</span>
+                        <span class="tag">02. UNBIASED FRIEND</span>
+                        <h3>판단하지 않는 나만의 친구</h3>
+                        <p>누구에게도 말하지 못한 고민, 디어로그는 어떤 선입견도 없이 들어줍니다. 당신의 감정을 판단하지 않고, 오직 당신의 편이 되어주는 가장 안전한 대화 상대를 만나보세요.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame">
+                            <img src="메인 홈-전화올때.png"> 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-row">
+                    <div class="feature-text">
+                        <span class="tag">03. AI DRAWING</span>
+                        <h3>오늘의 감정을 담은<br>귀여운 그림일기</h3>
+                        <p>일일이 그리지 않아도 괜찮아요. 당신의 하루 이야기를 듣고 디어로그가 그날의 기분과 감정을 담은 <b>귀여운 일기를</b>를 자동으로 생성해 줍니다. 오늘의 하루가 하나의 행성이 되어 우주로 보내집니다.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame">
+                            <img src="일기장.png" alt="일기장">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-row reverse">
+                    <div class="feature-text">
+                        <span class="tag">04. AI THERAPY</span>
                         <h3>심리학 기반 맞춤 테라피</h3>
-                        <p>단순한 기록을 넘어 NLP 심리학 모델이 당신의 내면을 읽습니다. 현재 감정에 가장 필요한 음악과 행동 요법을 제안하여 실질적인 치유를 돕습니다.</p>
+                        <p>단순한 기록을 넘어 NLP 심리학 모델이 당신의 내면을 읽습니다. 현재 감정에 가장 필요한 음악과 행동 요법을 제안하여 실질적인 힐링을 돕습니다.</p>
                     </div>
                     <div class="feature-visual">
                         <div class="mockup-frame"><img src="분석_오늘의 음악.png"></div>
                     </div>
                 </div>
+
+                <div class="feature-row">
+                    <div class="feature-text">
+                        <span class="tag">05. MULTIMODAL</span>
+                        <h3>텍스트 너머의 분석</h3>
+                        <p>"괜찮아"라고 말했지만 목소리는 떨리고 있나요? 텍스트와 음성 톤을 동시에 분석하여, 당신도 몰랐던 진짜 마음의 소리를 시각화된 리포트로 보여드립니다.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame"><img src="분석 탭-full.png"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 60px;">
+                    <span class="tag">OUR CORE TECHNOLOGY</span>
+                    <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
+                    <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <b>목소리의 떨림(Tone)</b>까지 듣습니다.</p>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <span style="font-size: 2.5rem;">🧬</span>
+                        <h3>자체 모델 파인튜닝</h3>
+                        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--accent-purple); font-weight:700;">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
+                    </div>
+                    <div class="tech-card">
+                        <span style="font-size: 2.5rem;">📊</span>
+                        <h3>음성 바이오마커</h3>
+                        <p>국내 최초로 음성 바이오마커 분석을 도입하여 객관적인 감정 리포트를 시각화하여 제공합니다.</p>
+                    </div>
+                    <div class="tech-card">
+                        <span style="font-size: 2.5rem;">🎵</span>
+                        <h3>맞춤형 알고리즘</h3>
+                        <p>심리학적 근거를 바탕으로 설계된 알고리즘이 당신의 정서적 회복을 지원합니다.</p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
     <footer>
         <div class="container">
             <h3 style="margin-bottom: 10px;">Dearlog.</h3>
@@ -169,6 +355,7 @@
             </p>
         </div>
     </footer>
+
     <script>
         const starContainer = document.getElementById('starContainer');
         for (let i = 0; i < 100; i++) {
@@ -181,14 +368,19 @@
             star.style.setProperty('--opacity', Math.random());
             starContainer.appendChild(star);
         }
+
         window.addEventListener('load', () => {
             const phone = document.getElementById('heroPhone');
             setTimeout(() => phone.classList.add('call-active', 'ringing'), 1500);
         });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
     </script>
