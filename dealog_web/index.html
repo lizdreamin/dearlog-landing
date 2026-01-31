@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dearlog | Voice-based AI Mental Care</title>
+    <style>
+        /* --- 디자인 시스템 --- */
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent-purple: #7d5fff;
+            --accent-blue: #4b7bec;
+            --accent-green: #26de81;
+            --text-gray: #a4b0be;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ✨ 우주 배경 (별 애니메이션) ✨ */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: #050505;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: var(--opacity);
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; }
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* --- 네비게이션 --- */
+        header {
+            position: fixed;
+            width: 100%; top: 0; z-index: 1000;
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 0;
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
+        .logo::before { content: '🌑'; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--text-gray); font-size: 0.95rem; font-weight: 500; }
+        .nav-links a:hover { color: white; }
+        .nav-links a.highlight { color: var(--accent-purple); font-weight: 700; }
+
+        /* --- 스토어 아이콘 버튼 스타일 (수정됨) --- */
+        .store-buttons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; /* 아이콘 사이 간격 */
+            margin-top: 40px; 
+            align-items: center;
+        }
+        
+        /* 개별 아이콘 스타일 */
+        .store-icon {
+            width: 65px; /* 아이콘 크기 */
+            height: 65px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); /* 그림자 효과 */
+            opacity: 0.9;
+        }
+
+        .store-icon:hover {
+            transform: scale(1.15) translateY(-5px); /* 마우스 올리면 커지면서 위로 뜸 */
+            opacity: 1;
+            filter: drop-shadow(0 10px 15px rgba(125, 95, 255, 0.3)); /* 보라색 글로우 효과 */
+        }
+
+        /* --- 섹션 스타일 --- */
+        section { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 2.8rem; margin-bottom: 20px; line-height: 1.2;}
+        .section-header p { color: var(--text-gray); font-size: 1.2rem; }
+        .tag { color: var(--accent-purple); font-weight: 700; font-size: 0.9rem; margin-bottom: 16px; display: block; letter-spacing: 2px;}
+
+        /* --- 히어로 섹션 --- */
+        .hero {
+            padding-top: 160px;
+            text-align: center;
+            background: radial-gradient(circle at center top, rgba(125, 95, 255, 0.15) 0%, transparent 60%);
+        }
+        .hero h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 24px; text-shadow: 0 0 30px rgba(125, 95, 255, 0.5); }
+        .hero p { color: var(--text-gray); font-size: 1.3rem; margin-bottom: 40px; }
+        
+        .hero-images {
+            display: flex; justify-content: center; margin-top: 60px;
+        }
+
+        /* 📱 통합된 하나의 폰 프레임 */
+        .single-phone {
+            width: 300px;
+            height: 600px;
+            border-radius: 45px;
+            border: 10px solid #1a1a1a;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(125, 95, 255, 0.2), 0 30px 60px rgba(0,0,0,0.8);
+            position: relative;
+            background: #000;
+            animation: vibrate 0.5s linear infinite paused; 
+        }
+
+        .single-phone.ringing {
+            animation-play-state: running;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 80px rgba(38, 222, 129, 0.4);
+        }
+
+        @keyframes vibrate {
+            0% { transform: translate(0) rotate(0); }
+            20% { transform: translate(-2px, 2px) rotate(-1deg); }
+            40% { transform: translate(-2px, -2px) rotate(1deg); }
+            60% { transform: translate(2px, 2px) rotate(0); }
+            80% { transform: translate(2px, -2px) rotate(1deg); }
+            100% { transform: translate(0) rotate(0); }
+        }
+
+        .screen-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; 
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .screen-home { z-index: 1; }
+        .screen-call {
+            z-index: 2;
+            transform: translateY(100%); 
+        }
+
+        .call-active .screen-call {
+            transform: translateY(0); 
+        }
+
+        /* --- 기능 섹션 --- */
+        .feature-row { display: flex; align-items: center; gap: 80px; margin-bottom: 140px; }
+        .feature-row.reverse { flex-direction: row-reverse; }
+        .feature-text { flex: 1; }
+        .feature-text h3 { font-size: 2.2rem; margin-bottom: 24px; }
+        .feature-text p { color: var(--text-gray); font-size: 1.15rem; line-height: 1.7; margin-bottom: 30px;}
+        .feature-list li { margin-bottom: 10px; color: #ddd; display: flex; align-items: center; gap: 10px;}
+        .feature-list li::before { content: '✓'; color: var(--accent-green); }
+        .feature-visual { flex: 1; display: flex; justify-content: center; }
+        
+        .mockup-frame {
+             width: 280px; border-radius: 40px; border: 8px solid #222; overflow: hidden;
+             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .mockup-frame img { width: 100%; height: auto; display: block; }
+
+
+        /* --- 기술 섹션 --- */
+        #technology { background: rgba(11, 11, 18, 0.8); position: relative; border-top: 1px solid rgba(255,255,255,0.05); }
+        .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .tech-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 30px; border-radius: 24px; transition: 0.3s;
+        }
+        .tech-card:hover { border-color: var(--accent-purple); transform: translateY(-5px); background: rgba(125, 95, 255, 0.05); box-shadow: 0 0 30px rgba(125, 95, 255, 0.1);}
+        .tech-icon { font-size: 2.5rem; margin-bottom: 24px; display: block; }
+        .tech-card h3 { font-size: 1.4rem; margin-bottom: 16px; }
+        .tech-card p { color: var(--text-gray); font-size: 1rem; line-height: 1.6; }
+        .highlight-text { color: var(--accent-purple); font-weight: 700; }
+
+        /* --- 푸터 --- */
+        footer { padding: 80px 0; text-align: center; border-top: 1px solid #222; color: #555; background: #020202;}
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.6rem; }
+            .feature-row, .feature-row.reverse, .tech-grid { flex-direction: column; grid-template-columns: 1fr; gap: 50px; }
+            .nav-links { display: none; } 
+            .single-phone { width: 260px; height: 520px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars" id="starContainer"></div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Dearlog.</div>
+                <ul class="nav-links">
+                    <li><a href="#home">홈</a></li>
+                    <li><a href="#features">기능 소개</a></li>
+                    <li><a href="#technology" class="highlight">Core Tech</a></li>
+                </ul>
+                <div style="font-size: 0.9rem; color: var(--accent-green); font-weight: 600;">● 2월 출시 예정</div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <span class="tag">AI MENTAL CARE PLATFORM</span>
+                <h1>입력하지 마세요.<br>그냥 말하기만 하세요.</h1>
+                <p>텍스트보다 쉽고, 상담보다 편안한<br>당신만의 감정 기록이 시작됩니다.</p>
+                
+                <div class="store-buttons">
+                    <a href="#" onclick="alert('앱스토어 출시 알림 신청 완료!')">
+                        <img src="애플아이콘.png" alt="App Store" class="store-icon">
+                    </a>
+                    <a href="#" onclick="alert('구글플레이 출시 알림 신청 완료!')">
+                        <img src="플스.png" alt="Google Play" class="store-icon">
+                    </a>
+                </div>
+                <div class="hero-images">
+                    <div class="single-phone" id="heroPhone">
+                        <img src="메인 홈-2.png" alt="홈 화면" class="screen-img screen-home">
+                        <img src="메인 홈-전화올때.png" alt="전화 수신 화면" class="screen-img screen-call">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container intro-text">
+                <h3>"오늘 하루 어땠어?"<br>이 한 마디면 충분합니다.</h3>
+                <p>
+                    늦은 밤, 고민을 털어놓을 상대가 필요한가요?<br>
+                    오늘 하루, 기록하고싶지만 일기 쓰기가 노동처럼 느껴진 적 있나요?<br>
+                    디어로그는 <b>타이핑이 필요 없습니다.</b><br>
+                    침대에 누워, 친구에게 통화하듯 편하게 이야기하세요.
+                </p>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container">
+                <div class="section-header">
+                    <span class="tag">WHY DEARLOG</span>
+                    <h2>단순한 기록을 넘어<br>치유의 경험으로</h2>
+                </div>
+
+                <div class="feature-row">
+                    <div class="feature-text">
+                        <h3>01. 입력 없는 기록<br>Zero-Typing</h3>
+                        <p>가장 위로가 필요한 번아웃의 순간, 글을 쓰는 건 또 다른 노동입니다. 디어로그에서는 손가락 하나 까딱할 필요 없습니다. 오직 당신의 목소리만 있으면 됩니다.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame">
+                            <img src="전화 대화중_3.png" alt="음성 기록 화면">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-row reverse">
+                    <div class="feature-text">
+                        <h3>02. NLP 심리학 기반<br>맞춤형 감정 테라피</h3>
+                        <p>단순히 감정을 분류하는 것을 넘어, <b>NLP(자연어 처리) 심리학 모델</b>을 기반으로 당신의 내면을 분석합니다. 현재 감정 상태에 딱 맞는 음악과 활동을 처방해 드립니다.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame">
+                            <img src="분석_오늘의 음악.png" alt="음악 추천 화면">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-row">
+                    <div class="feature-text">
+                        <h3>03. 텍스트 너머의 진실<br>멀티모달 감정 분석</h3>
+                        <p>"괜찮아"라고 말했지만 목소리는 떨리고 있나요? 텍스트와 음성 톤을 동시에 분석하여, 당신도 몰랐던 진짜 마음의 소리를 시각화된 리포트로 보여드립니다.</p>
+                    </div>
+                    <div class="feature-visual">
+                        <div class="mockup-frame">
+                            <img src="분석 탭-full.png" alt="감정 분석 리포트">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology">
+            <div class="container">
+                <div class="section-header">
+                    <span class="tag">OUR CORE TECHNOLOGY</span>
+                    <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
+                    <p>기존 멘탈케어 앱은 텍스트만 읽습니다.<br>디어로그는 <b>목소리의 떨림(Tone)</b>까지 듣습니다.</p>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <span class="tech-icon">🧬</span>
+                        <h3>자체 모델 파인튜닝</h3>
+                        <p>범용 API에 의존하지 않습니다. 한국어 감정 음성 데이터셋을 기반으로 <span class="highlight-text">Wav2Vec 2.0 모델을 직접 파인튜닝</span>하여, 미세한 감정 변화까지 포착합니다.</p>
+                    </div>
+                    <div class="tech-card">
+                        <span class="tech-icon">🥇</span>
+                        <h3>First Mover Advantage</h3>
+                        <p>현재 국내 멘탈케어 앱 중 <span class="highlight-text">음성 바이오마커를 분석하는 서비스는 없습니다.</span> 가장 진보된 데이터 플랫폼을 구축합니다.</p>
+                    </div>
+                    <div class="tech-card">
+                        <span class="tech-icon">🎵</span>
+                        <h3>Therapeutic Algorithm</h3>
+                        <p>단순 추천이 아닌 <span class="highlight-text">심리학적 근거 기반의 큐레이션</span>(음악, 행동요법)을 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h3>Dearlog.</h3>
+            <p>지금 앱스토어와 플레이스토어에서 만나요.</p>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.6;">대표자: 김발해 | Contact: dearlogofficial@gmail.com</p>
+            <p style="margin-top: 5px; font-size: 0.9rem; opacity: 0.6;">&copy; 2026 Dearlog Inc. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const starContainer = document.getElementById('starContainer');
+        const starCount = 100;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1;
+            const duration = Math.random() * 3 + 2;
+            const opacity = Math.random();
+
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.setProperty('--opacity', opacity);
+
+            starContainer.appendChild(star);
+        }
+
+        window.addEventListener('load', () => {
+            const phone = document.getElementById('heroPhone');
+            setTimeout(() => {
+                phone.classList.add('call-active'); 
+                phone.classList.add('ringing');     
+            }, 1500);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
