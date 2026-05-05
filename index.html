@@ -1,388 +1,1705 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dearlog | Voice-based AI Mental Care</title>
-    <style>
-        /* --- 디자인 시스템 --- */
-        :root {
-            --bg-color: #050505;
-            --text-color: #ffffff;
-            --accent-purple: #7d5fff;
-            --accent-blue: #4b7bec;
-            --accent-green: #26de81;
-            --text-gray: #a4b0be;
-            --card-bg: rgba(255, 255, 255, 0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dearlog — 목소리로 읽는 감정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a0f;
+  --paper: #f6f4f0;
+  --mist: #e8e4de;
+  --violet: #6b4eff;
+  --violet-pale: #ede9ff;
+  --lavender: #b8a9ff;
+  --sage: #8db4a0;
+  --warm: #f0ebe3;
+  --text: #1a1824;
+  --muted: #7a7389;
+  --r: 20px;
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-        }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-        /* ✨ 우주 배경 (별 애니메이션) ✨ */
-        .stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: #050505;
-            overflow: hidden;
-        }
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-            opacity: var(--opacity);
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; }
-        }
+html { scroll-behavior: smooth; }
 
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+body {
+  background: var(--ink);
+  color: #fff;
+  font-family: 'DM Sans', 'Gowun Dodum', sans-serif;
+  overflow-x: hidden;
+}
 
-        /* --- 네비게이션 --- */
-        header {
-            position: fixed;
-            width: 100%; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 15px 0;
-        }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px;}
-        .logo::before { content: '🌑'; }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { color: var(--text-gray); font-size: 0.95rem; font-weight: 500; }
-        .nav-links a:hover { color: white; }
-        .nav-links a.highlight { color: var(--accent-purple); font-weight: 700; }
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
 
-        /* --- 이메일 수집 폼 & 스토어 버튼 --- */
-        .cta-area { 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
-            margin-top: 40px; 
-            gap: 20px;
-        }
-        .release-form {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            max-width: 450px;
-        }
-        .release-form input {
-            flex: 1;
-            padding: 14px 22px;
-            border-radius: 30px;
-            border: 1px solid rgba(125, 95, 255, 0.4);
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-        .release-form input:focus {
-            border-color: var(--accent-purple);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 15px rgba(125, 95, 255, 0.2);
-        }
-        .release-form button {
-            padding: 0 28px;
-            border-radius: 30px;
-            border: none;
-            background: var(--accent-purple);
-            color: white;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            white-space: nowrap;
-        }
-        .release-form button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(125, 95, 255, 0.4);
-        }
+/* ── CANVAS STARS ── */
+#starCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
-        /* 스토어 아이콘 스타일 */
-        .store-preview {
-            display: flex;
-            gap: 25px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-        }
-        .store-icon {
-            width: 50px; height: 50px;
-            object-fit: contain;
-            opacity: 0.8;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .store-icon:hover { opacity: 1; transform: scale(1.1); }
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
 
-        /* --- 히어로 섹션 --- */
-        .hero {
-            padding-top: 160px;
-            text-align: center;
-            background: radial-gradient(circle at center top, rgba(125, 95, 255, 0.15) 0%, transparent 60%);
-        }
-        .hero h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 24px; text-shadow: 0 0 30px rgba(125, 95, 255, 0.5); word-break: keep-all; }
-        .hero p { color: var(--text-gray); font-size: 1.3rem; margin-bottom: 20px; word-break: keep-all; }
-        .tag { color: var(--accent-purple); font-weight: 700; font-size: 0.9rem; margin-bottom: 16px; display: block; letter-spacing: 2px;}
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
 
-        /* 📱 폰 프레임 */
-        .hero-images { display: flex; justify-content: center; margin-top: 60px; }
-        .single-phone {
-            width: 300px; height: 600px;
-            border-radius: 45px; border: 10px solid #1a1a1a;
-            overflow: hidden;
-            box-shadow: 0 0 80px rgba(125, 95, 255, 0.2), 0 30px 60px rgba(0,0,0,0.8);
-            position: relative; background: #000;
-            animation: vibrate 0.5s linear infinite paused; 
-        }
-        .single-phone.ringing { animation-play-state: running; border-color: var(--accent-green); }
-        @keyframes vibrate {
-            0% { transform: translate(0) rotate(0); }
-            20% { transform: translate(-2px, 2px) rotate(-1deg); }
-            40% { transform: translate(-2px, -2px) rotate(1deg); }
-            100% { transform: translate(0) rotate(0); }
-        }
-        .screen-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
-        .screen-home { z-index: 1; }
-        .screen-call { z-index: 2; transform: translateY(100%); }
-        .call-active .screen-call { transform: translateY(0); }
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.25s;
+}
+.nav-links a:hover { color: #fff; }
 
-        /* --- 섹션 스타일 --- */
-        section { padding: 100px 0; }
-        .feature-row { display: flex; align-items: center; gap: 80px; margin-bottom: 140px; }
-        .feature-row.reverse { flex-direction: row-reverse; }
-        .feature-text { flex: 1; }
-        .feature-text h3 { font-size: 2.2rem; margin-bottom: 24px; word-break: keep-all; }
-        .feature-text p { color: var(--text-gray); font-size: 1.15rem; line-height: 1.7; word-break: keep-all; }
-        .mockup-frame { width: 280px; border-radius: 40px; border: 8px solid #222; overflow: hidden; background: #111; }
-        .mockup-frame img { width: 100%; display: block; }
+.nav-badge {
+  font-size: 0.75rem;
+  color: var(--sage);
+  border: 1px solid rgba(141,180,160,0.4);
+  padding: 5px 14px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
 
-        /* --- 기술 섹션 --- */
-        #technology { background: rgba(11, 11, 18, 0.8); position: relative; border-top: 1px solid rgba(255,255,255,0.05); }
-        .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
-        .tech-card { background: var(--card-bg); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
-        .tech-card h3 { margin: 20px 0 15px; font-size: 1.4rem; }
-        .tech-card p { color: var(--text-gray); word-break: keep-all; }
+/* ── SECTIONS BASE ── */
+section { position: relative; z-index: 1; }
 
-        footer { padding: 80px 0; text-align: center; border-top: 1px solid #222; color: #555; background: #020202;}
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
 
-        /* ✨ 모바일 최적화 ✨ */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.1rem; line-height: 1.3; }
-            .hero p { font-size: 1.1rem; }
-            .release-form { flex-direction: column; padding: 0 20px; }
-            .release-form button { padding: 14px; }
-            .feature-row, .feature-row.reverse { flex-direction: column; text-align: center; gap: 40px; }
-            .tech-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .single-phone { width: 260px; height: 520px; }
-        }
-    </style>
+/* Ambient glow blobs */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107,78,255,0.18) 0%, transparent 70%);
+  top: -150px; left: -200px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(141,180,160,0.12) 0%, transparent 70%);
+  bottom: -100px; right: 100px;
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--lavender);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--lavender);
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3rem, 5.5vw, 5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 28px;
+  word-break: keep-all;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--lavender);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.75;
+  max-width: 480px;
+  margin-bottom: 48px;
+  word-break: keep-all;
+}
+
+/* CTA form */
+.hero-form {
+  display: flex;
+  gap: 10px;
+  max-width: 420px;
+}
+.hero-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 14px 22px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s;
+}
+.hero-form input::placeholder { color: rgba(255,255,255,0.3); }
+.hero-form input:focus {
+  border-color: var(--violet);
+  background: rgba(107,78,255,0.08);
+}
+.hero-form button {
+  background: var(--violet);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 24px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hero-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107,78,255,0.4);
+}
+
+.hero-stores {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  align-items: center;
+}
+.hero-stores span {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+.store-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.store-pill:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.store-pill img { width: 16px; height: 16px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.7; }
+
+/* ── PHONE MOCKUP ── */
+.phone-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.phone-glow {
+  position: absolute;
+  width: 320px; height: 500px;
+  background: radial-gradient(ellipse, rgba(107,78,255,0.25) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.phone {
+  width: 280px;
+  height: 560px;
+  background: #0d0d12;
+  border-radius: 42px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 6px rgba(255,255,255,0.03),
+    0 40px 80px rgba(0,0,0,0.6),
+    inset 0 0 40px rgba(0,0,0,0.4);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.phone img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.8s ease;
+}
+
+/* phone notch */
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 22px;
+  background: #0d0d12;
+  border-radius: 20px;
+  z-index: 10;
+}
+
+/* ── MARQUEE ── */
+.marquee-section {
+  padding: 40px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  white-space: nowrap;
+}
+.marquee-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--violet);
+  opacity: 0.6;
+}
+
+/* ── QUOTE ── */
+.quote-section {
+  padding: 140px 48px;
+  text-align: center;
+}
+.quote-section blockquote {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  max-width: 760px;
+  margin: 0 auto;
+  color: rgba(255,255,255,0.88);
+  word-break: keep-all;
+}
+.quote-section blockquote em {
+  font-style: italic;
+  color: var(--lavender);
+}
+.quote-sub {
+  margin-top: 32px;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+}
+
+/* ── FEATURES ── */
+.features-section {
+  padding: 80px 48px 140px;
+}
+
+.features-header {
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.features-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  max-width: 500px;
+  word-break: keep-all;
+}
+.features-header p {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.4);
+  max-width: 300px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+/* Feature cards grid */
+.feat-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+
+.feat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: default;
+}
+.feat-card:hover {
+  border-color: rgba(107,78,255,0.3);
+  transform: translateY(-4px);
+}
+
+.feat-card.wide { grid-column: span 2; }
+.feat-card.tall { grid-row: span 2; }
+
+.feat-card-inner {
+  padding: 36px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.feat-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lavender);
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.feat-num {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.2);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
+}
+
+.feat-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  word-break: keep-all;
+}
+
+.feat-desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  word-break: keep-all;
+  flex: 1;
+}
+
+.feat-img-wrap {
+  margin-top: 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+}
+.feat-img-wrap img {
+  width: 100%;
+  display: block;
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+.feat-card:hover .feat-img-wrap img { opacity: 1; }
+
+/* ── TECH SECTION ── */
+.tech-section {
+  padding: 120px 48px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.tech-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tech-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--lavender);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0.8;
+}
+
+.section-label::before, .section-label::after {
+  content: '';
+  display: block;
+  width: 20px; height: 1px;
+  background: var(--lavender);
+  opacity: 0.5;
+}
+
+.tech-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  word-break: keep-all;
+}
+
+.tech-header p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.45);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.tech-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.tech-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 40px 32px;
+  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--violet), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tech-card:hover { border-color: rgba(107,78,255,0.25); }
+.tech-card:hover::before { opacity: 1; }
+
+.tech-icon {
+  width: 48px; height: 48px;
+  background: rgba(107,78,255,0.12);
+  border: 1px solid rgba(107,78,255,0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  font-size: 1.4rem;
+}
+
+.tech-card h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.tech-card p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.42);
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.tech-card .stat {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 2rem;
+  font-family: 'DM Serif Display', serif;
+  color: var(--lavender);
+}
+.tech-card .stat span {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  margin-top: 4px;
+}
+
+/* ── FINAL CTA ── */
+.cta-section {
+  padding: 160px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107,78,255,0.15) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  word-break: keep-all;
+}
+
+.cta-section h2 em {
+  font-style: italic;
+  color: var(--lavender);
+}
+
+.cta-section p {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 48px;
+  word-break: keep-all;
+}
+
+.cta-form {
+  display: flex;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.cta-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 16px 22px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.25s;
+}
+.cta-form input::placeholder { color: rgba(255,255,255,0.3); }
+.cta-form input:focus { border-color: var(--violet); }
+.cta-form button {
+  background: #fff;
+  color: var(--ink);
+  border: none;
+  border-radius: 100px;
+  padding: 16px 28px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,255,255,0.15);
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.footer-info {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.2);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── CURSOR TRAIL ── */
+.cursor-dot {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 9998;
+  mix-blend-mode: screen;
+  animation: cursorFade var(--life) ease-out forwards;
+}
+@keyframes cursorFade {
+  0%   { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.2); }
+}
+
+/* ── WAVEFORM ── */
+.waveform-wrap {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 36px;
+}
+.waveform-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--lavender);
+  opacity: 0.5;
+  transform-origin: center;
+  transition: opacity 0.3s;
+}
+.waveform.active .waveform-bar {
+  opacity: 1;
+  animation: waveAnim var(--spd) ease-in-out infinite alternate;
+}
+@keyframes waveAnim {
+  from { transform: scaleY(0.15); }
+  to   { transform: scaleY(1); }
+}
+.waveform-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.06em;
+}
+.waveform-label.active { color: var(--lavender); }
+
+/* ── PHONE TILT ── */
+.phone {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ── HERO TEXT ANIMATION ── */
+.hero-label,
+.hero h1,
+.hero-sub,
+.hero-form,
+.hero-stores,
+.waveform-wrap {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: heroReveal 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero-label  { animation-delay: 0.1s; }
+.hero h1     { animation-delay: 0.28s; }
+.hero-sub    { animation-delay: 0.44s; }
+.hero-form   { animation-delay: 0.58s; }
+.hero-stores { animation-delay: 0.68s; }
+.waveform-wrap { animation-delay: 0.76s; }
+
+@keyframes heroReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Phone also fades in */
+.phone-wrap {
+  opacity: 0;
+  animation: heroReveal 1s cubic-bezier(0.22,1,0.36,1) 0.35s forwards;
+}
+
+/* ── REVIEW CARD GLOW on hover ── */
+.review-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 0%, rgba(184,169,255,0.18), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.review-card:hover::before { opacity: 1; }
+
+/* ── FEAT CARD PARALLAX (handled in JS, just ensure no overflow clip) ── */
+.feat-grid { perspective: 1200px; }
+
+/* ── SCROLL PROGRESS ── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--violet);
+  z-index: 200;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ── REVIEWS ── */
+.reviews-section {
+  padding: 120px 48px;
+  overflow: hidden;
+}
+
+.reviews-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.reviews-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+  word-break: keep-all;
+}
+
+.reviews-header p {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.reviews-track-wrap {
+  position: relative;
+}
+.reviews-track-wrap::before,
+.reviews-track-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+.reviews-track-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--ink), transparent);
+}
+.reviews-track-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--ink), transparent);
+}
+
+.reviews-row {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: slideReviews 35s linear infinite;
+}
+.reviews-row.reverse {
+  animation: slideReviewsReverse 40s linear infinite;
+  margin-top: 16px;
+}
+
+@keyframes slideReviews {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes slideReviewsReverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.review-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 28px 28px 24px;
+  width: 300px;
+  flex-shrink: 0;
+  transition: border-color 0.3s;
+  position: relative;
+}
+.review-card:hover {
+  border-color: rgba(184,169,255,0.25);
+}
+
+.review-stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 14px;
+}
+.review-stars span {
+  font-size: 0.85rem;
+  color: #f5c842;
+}
+
+.review-text {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 20px;
+  word-break: keep-all;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.review-name {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+}
+.review-meta {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.28);
+  margin-top: 1px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+
+  .hero { padding: 100px 24px 60px; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2.6rem; }
+  .hero-label { justify-content: center; }
+  .hero-sub { margin: 0 auto 48px; }
+  .hero-form { max-width: 100%; }
+  .hero-stores { justify-content: center; }
+  .phone-wrap { order: -1; }
+  .phone { width: 220px; height: 440px; }
+
+  .features-section { padding: 60px 24px 100px; }
+  .features-header { flex-direction: column; align-items: flex-start; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .feat-card.wide { grid-column: span 1; }
+  .feat-card.tall { grid-row: span 1; }
+
+  .tech-section { padding: 80px 24px; }
+  .tech-cards { grid-template-columns: 1fr; }
+
+  .quote-section { padding: 80px 24px; }
+  .quote-section blockquote { font-size: 1.6rem; }
+
+  .cta-section { padding: 100px 24px; }
+  .cta-form { flex-direction: column; }
+  .cta-form button { width: 100%; }
+
+  footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+  .footer-info { text-align: center; }
+  .reviews-section { padding: 80px 0; }
+  .reviews-header { padding: 0 24px; }
+}
+</style>
 </head>
 <body>
 
-    <div class="stars" id="starContainer"></div>
+<div class="progress-bar" id="progress"></div>
+<canvas id="starCanvas"></canvas>
 
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">Dearlog.</div>
-                <ul class="nav-links">
-                    <li><a href="#home">홈</a></li>
-                    <li><a href="#features">기능 소개</a></li>
-                    <li><a href="#technology" class="highlight">Core Tech</a></li>
-                </ul>
-                <div style="font-size: 0.8rem; color: var(--accent-green); font-weight: 600;">● 2월 출시 예정</div>
-            </nav>
+<nav>
+  <div class="nav-logo">Dearlog.</div>
+  <ul class="nav-links">
+    <li><a href="#features">기능</a></li>
+    <li><a href="#technology">기술</a></li>
+    <li><a href="#cta">출시 알림</a></li>
+  </ul>
+  <div class="nav-badge">곧 출시</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-label">AI Mental Care Platform</p>
+      <h1>말하면<br><em>알아요.</em></h1>
+      <p class="hero-sub">
+        목소리의 떨림에서 진짜 감정을 읽어드립니다.<br>
+        텍스트보다 쉽고, 상담보다 편안한<br>
+        당신만의 감정 기록이 지금 시작됩니다.
+      </p>
+      <form class="hero-form" onsubmit="handleSubmit(event)">
+        <input type="email" placeholder="이메일 주소 입력" required>
+        <button type="submit">출시 알림 받기</button>
+      </form>
+      <div class="hero-stores">
+        <span>준비 중</span>
+        <div class="store-pill" onclick="alert('앱스토어 출시 준비 중입니다!')">
+          <img src="애플아이콘.png" alt="App Store"> App Store
         </div>
-    </header>
-
-    <main>
-        <section id="home" class="hero">
-            <div class="container">
-                <span class="tag">AI MENTAL CARE PLATFORM</span>
-                <h1>입력하지 않아도 돼요.<br>그냥 말하기만 하세요.</h1>
-                <p>텍스트보다 쉽고, 상담보다 편안한<br>당신만의 감정 기록이 시작됩니다.</p>
-                
-                <div class="cta-area">
-                    <form class="release-form" name="dearlog-launch" method="POST" data-netlify="true">
-                        <input type="hidden" name="form-name" value="dearlog-launch" />
-                        <input type="email" name="email" placeholder="이메일 주소를 입력해주세요" required>
-                        <button type="submit">출시 알림 받기</button>
-                    </form>
-                    
-                    <div class="store-preview">
-                        <img src="애플아이콘.png" alt="App Store" class="store-icon" onclick="alert('앱스토어 출시 준비 중입니다!')">
-                        <img src="플스.png" alt="Google Play" class="store-icon" onclick="alert('구글플레이 출시 준비 중입니다!')">
-                    </div>
-                </div>
-
-                <div class="hero-images">
-                    <div class="single-phone" id="heroPhone">
-                        <img src="메인 홈-2.png" alt="홈" class="screen-img screen-home">
-                        <img src="메인 홈-전화올때.png" alt="전화" class="screen-img screen-call">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section style="text-align: center;">
-            <div class="container">
-                <h3 style="font-size: 1.8rem; margin-bottom: 24px; word-break: keep-all;">"오늘 내 하루는..."<br>이 한 마디면 충분합니다.</h3>
-                <p style="color: var(--text-gray); max-width: 750px; margin: 0 auto; word-break: keep-all;">
-                    늦은 밤, 누군가에게 마음을 털어놓고 싶나요?<br>
-                    일기 쓰기가 또 하나의 '일'처럼 느껴져 망설여졌나요?<br>
-                    디어로그는 <b>타이핑이 필요 없습니다.</b><br>
-                    침대에 누워 친구와 통화하듯 편하게 이야기만 하세요.
-                </p>
-            </div>
-        </section>
-
-        <section id="features">
-            <div class="container">
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <span class="tag">01. ZERO-TYPING</span>
-                        <h3>입력 없는 기록</h3>
-                        <p>번아웃의 순간엔 손가락 하나 움직이는 것도 버겁습니다. 디어로그는 당신의 목소리를 실시간으로 기록하고 분석하여 기록의 부담을 완전히 없앴습니다.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="mockup-frame"><img src="전화 대화중.png"></div>
-                    </div>
-                </div>
-
-                <div class="feature-row reverse">
-                    <div class="feature-text">
-                        <span class="tag">02. UNBIASED FRIEND</span>
-                        <h3>판단하지 않는 나만의 친구</h3>
-                        <p>누구에게도 말하지 못한 고민, 디어로그는 어떤 선입견도 없이 들어줍니다. 당신의 감정을 판단하지 않고, 오직 당신의 편이 되어주는 가장 안전한 대화 상대를 만나보세요.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="mockup-frame">
-                            <img src="전화 대화중_3.png"> 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <span class="tag">03. AI DRAWING</span>
-                        <h3>오늘의 감정을 담은<br>귀여운 그림일기</h3>
-                        <p>일일이 그리지 않아도 괜찮아요. 당신의 하루 이야기를 듣고 디어로그가 그날의 기분과 감정을 담은 <b>귀여운 일기</b>를 자동으로 생성해 줍니다. 오늘의 하루가 하나의 행성이 되어 우주로 보내집니다.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="mockup-frame">
-                            <img src="일기장.png" alt="일기장">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-row reverse">
-                    <div class="feature-text">
-                        <span class="tag">04. AI THERAPY</span>
-                        <h3>심리학 기반 맞춤 테라피</h3>
-                        <p>단순히 감정을 분류하는 것을 넘어, NLP 심리학 모델을 기반으로 당신의 내면을 분석합니다. 현재 감정 상태에 딱 맞는 음악과 행동 요법을 제안하여 실질적인 힐링을 돕습니다.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="mockup-frame"><img src="분석_오늘의 음악.png"></div>
-                    </div>
-                </div>
-
-                <div class="feature-row">
-                    <div class="feature-text">
-                        <span class="tag">05. MULTIMODAL</span>
-                        <h3>텍스트 너머의 심층분석</h3>
-                        <p>"괜찮아"라고 말했지만 목소리는 떨리고 있지 않나요? 텍스트와 음성 톤을 동시에 분석하여, 당신도 몰랐던 진짜 마음의 소리를 시각화된 리포트로 보여드립니다.</p>
-                    </div>
-                    <div class="feature-visual">
-                        <div class="mockup-frame"><img src="분석 탭-full.png"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="technology">
-            <div class="container">
-                <div style="text-align: center; margin-bottom: 60px;">
-                    <span class="tag">OUR CORE TECHNOLOGY</span>
-                    <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
-                    <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <b>목소리의 떨림(Tone)</b>까지 듣습니다.</p>
-                </div>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <span style="font-size: 2.5rem;">🧬</span>
-                        <h3>자체 모델 파인튜닝</h3>
-                        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--accent-purple); font-weight:700;">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
-                    </div>
-                    <div class="tech-card">
-                        <span style="font-size: 2.5rem;">📊</span>
-                        <h3>음성 바이오마커</h3>
-                        <p>국내 최초로 음성 바이오마커 분석을 도입하여 객관적인 감정 리포트를 시각화하여 제공합니다.</p>
-                    </div>
-                    <div class="tech-card">
-                        <span style="font-size: 2.5rem;">🎵</span>
-                        <h3>맞춤형 알고리즘</h3>
-                        <p>감정 상태(Audio)와 대화 내용(Text)을 결합한 알고리즘으로, 단순 추천이 아닌 <span class="highlight-text">심리학적 근거를 바탕으로 설계된 알고리즘이 당신의 정서적 회복을 지원합니다.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <h3 style="margin-bottom: 10px;">Dearlog.</h3>
-            <p style="font-size: 0.8rem; opacity: 0.5;">
-                대표자: 김발해 | Contact: dearlogofficial@gmail.com<br>
-                &copy; 2026 Dearlog Inc. All Rights Reserved.
-            </p>
+        <div class="store-pill" onclick="alert('구글플레이 출시 준비 중입니다!')">
+          <img src="플스.png" alt="Google Play"> Google Play
         </div>
-    </footer>
+      </div>
 
-    <script>
-        const starContainer = document.getElementById('starContainer');
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.width = star.style.height = `${Math.random() * 2 + 1}px`;
-            star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
-            star.style.setProperty('--opacity', Math.random());
-            starContainer.appendChild(star);
-        }
+      <!-- WAVEFORM -->
+      <div class="waveform-wrap" id="waveWrap">
+        <div class="waveform" id="waveform"></div>
+        <span class="waveform-label" id="waveLabel">클릭해서 체험해보세요</span>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone-glow"></div>
+      <div class="phone" id="heroPhone">
+        <img src="메인 홈-2.png" alt="Dearlog 홈 화면" id="phoneImg">
+      </div>
+    </div>
+  </div>
+</section>
 
-        window.addEventListener('load', () => {
-            const phone = document.getElementById('heroPhone');
-            setTimeout(() => phone.classList.add('call-active', 'ringing'), 1500);
-        });
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><span class="marquee-dot"></span>음성 바이오마커 분석</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Wav2Vec 2.0 한국어 특화</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>멀티모달 AI</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>자동 그림일기</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Cross-Attention 융합</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>AI 심층 감정 리포트</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>MindMatch 매칭</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>음성 바이오마커 분석</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Wav2Vec 2.0 한국어 특화</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>멀티모달 AI</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>자동 그림일기</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Cross-Attention 융합</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>AI 심층 감정 리포트</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>MindMatch 매칭</div>
+  </div>
+</div>
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-    </script>
+<!-- QUOTE -->
+<section class="quote-section reveal">
+  <blockquote>
+    "오늘 어땠어?" 한 마디면 충분합니다.<br>
+    <em>말하는 것만으로</em> 당신의 감정이<br>기록되고 케어됩니다.
+  </blockquote>
+  <p class="quote-sub">
+    타이핑 없이, 복잡한 설정 없이.<br>
+    침대에 누워 친구와 통화하듯, 그냥 이야기하세요.
+  </p>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="features-header reveal">
+    <h2>일상 속 대화가<br>감정 데이터가 됩니다</h2>
+    <p>텍스트가 담지 못하는 93%의 감정 신호를 목소리에서 직접 읽어냅니다.</p>
+  </div>
+
+  <div class="feat-grid">
+    <!-- Card 1: Zero-typing wide -->
+    <div class="feat-card wide reveal">
+      <div class="feat-card-inner">
+        <div>
+          <p class="feat-num">01</p>
+          <p class="feat-tag">Zero Typing</p>
+          <h3 class="feat-title">입력 없는 기록</h3>
+          <p class="feat-desc">번아웃의 순간엔 손가락 하나 움직이는 것도 버겁습니다. 디어로그는 목소리를 실시간으로 기록하고 분석해 기록의 부담을 완전히 없앴습니다.</p>
+        </div>
+        <div class="feat-img-wrap">
+          <img src="전화 대화중.png" alt="대화 화면">
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Unbiased -->
+    <div class="feat-card reveal">
+      <div class="feat-card-inner">
+        <div>
+          <p class="feat-num">02</p>
+          <p class="feat-tag">Unbiased Friend</p>
+          <h3 class="feat-title">판단하지 않는 친구</h3>
+          <p class="feat-desc">누구에게도 말하지 못한 고민, 디어로그는 어떤 선입견도 없이 들어줍니다. 당신의 감정을 판단하지 않고, 오직 당신의 편이 되어주는 가장 안전한 대화 상대를 만나보세요.</p>
+        </div>
+        <div class="feat-img-wrap">
+          <img src="전화 대화중_3.png" alt="대화 화면 2">
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: AI Drawing tall -->
+    <div class="feat-card tall reveal">
+      <div class="feat-card-inner" style="height:100%">
+        <div>
+          <p class="feat-num">03</p>
+          <p class="feat-tag">AI Drawing</p>
+          <h3 class="feat-title">오늘의 감정을 담은 그림일기</h3>
+          <p class="feat-desc">일일이 그리지 않아도 괜찮아요. 당신의 하루 이야기를 듣고 디어로그가 그날의 기분과 감정을 담은 귀여운 일기를 자동으로 생성해 줍니다. 오늘의 하루가 하나의 행성이 되어 우주로 보내집니다.</p>
+        </div>
+        <div class="feat-img-wrap" style="margin-top:auto">
+          <img src="일기장.png" alt="일기장" style="height:280px">
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: AI Therapy -->
+    <div class="feat-card reveal">
+      <div class="feat-card-inner">
+        <div>
+          <p class="feat-num">04</p>
+          <p class="feat-tag">AI Therapy</p>
+          <h3 class="feat-title">심리학 기반 맞춤 테라피</h3>
+          <p class="feat-desc">단순히 감정을 분류하는 것을 넘어, NLP 심리학 모델을 기반으로 당신의 내면을 분석합니다. 현재 감정 상태에 딱 맞는 음악과 행동 요법을 제안하여 실질적인 힐링을 돕습니다.</p>
+        </div>
+        <div class="feat-img-wrap">
+          <img src="분석_오늘의 음악.png" alt="음악 추천">
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Multimodal wide -->
+    <div class="feat-card wide reveal">
+      <div class="feat-card-inner">
+        <div>
+          <p class="feat-num">05</p>
+          <p class="feat-tag">Multimodal Analysis</p>
+          <h3 class="feat-title">텍스트 너머의 심층 분석</h3>
+          <p class="feat-desc">"괜찮아"라고 말했지만 목소리는 떨리고 있지 않나요? 텍스트와 음성 톤을 동시에 분석해 당신도 몰랐던 진짜 감정을 시각화된 리포트로 보여드립니다.</p>
+        </div>
+        <div class="feat-img-wrap">
+          <img src="분석 탭-full.png" alt="분석 탭">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="tech-section" id="technology">
+  <div class="tech-inner">
+    <div class="tech-header reveal">
+      <p class="section-label">Our Core Technology</p>
+      <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
+      <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <strong style="color:rgba(255,255,255,0.85)">목소리의 떨림(Tone)</strong>까지 듣습니다.</p>
+    </div>
+
+    <div class="tech-cards">
+      <div class="tech-card reveal">
+        <div class="tech-icon">🧬</div>
+        <h3>자체 모델 파인튜닝</h3>
+        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--lavender);font-weight:500">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
+      </div>
+
+      <div class="tech-card reveal">
+        <div class="tech-icon">📊</div>
+        <h3>음성 바이오마커</h3>
+        <p>국내 최초로 음성 바이오마커 분석을 도입하여 객관적인 감정 리포트를 시각화하여 제공합니다.</p>
+      </div>
+
+      <div class="tech-card reveal">
+        <div class="tech-icon">🎵</div>
+        <h3>맞춤형 알고리즘</h3>
+        <p>감정 상태(Audio)와 대화 내용(Text)을 결합한 알고리즘으로, 단순 추천이 아닌 심리학적 근거를 바탕으로 설계된 알고리즘이 당신의 정서적 회복을 지원합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="reviews-inner">
+    <div class="reviews-header reveal">
+      <p class="section-label">User Reviews</p>
+      <h2>이미 많은 분들이<br>말하고 있어요</h2>
+      <p>베타 테스터 60명의 실제 목소리</p>
+    </div>
+  </div>
+
+  <div class="reviews-track-wrap">
+    <!-- Row 1 -->
+    <div class="reviews-row">
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"일기 쓰는 게 너무 귀찮아서 항상 중간에 포기했는데, 그냥 말만 하면 된다니까 신기하게도 매일 하게 됐어요. 한 달째 연속 기록 중입니다."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.2);color:#b8a9ff">지은</div>
+          <div><p class="review-name">이지은</p><p class="review-meta">25세 · 직장인</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"저는 감정 표현이 서투른 편인데, 말하고 나면 AI가 제가 몰랐던 감정까지 짚어줘요. '오늘 불안감이 높았네요'라고 했을 때 진짜 소름 돋았어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.2);color:#8db4a0">민준</div>
+          <div><p class="review-name">박민준</p><p class="review-meta">28세 · 대학원생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"늦은 밤에 혼자 있을 때 마음이 답답한데 아무한테도 연락하기가 미안하잖아요. 디어로그한테 털어놓고 나면 진짜 가벼워져요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(240,235,227,0.1);color:#e0d8cc">수아</div>
+          <div><p class="review-name">김수아</p><p class="review-meta">23세 · 대학생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
+        <p class="review-text">"그림일기 기능이 너무 귀여워요. 오늘 제 감정이 연보라 하늘 아래 작은 행성으로 그려졌는데... 이상하게 위로가 됐어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">하린</div>
+          <div><p class="review-name">최하린</p><p class="review-meta">22세 · 디자인 전공</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"회사 다니면서 감정을 그냥 눌러놓고 살았는데, 퇴근하고 5분만 얘기해도 하루가 정리되는 느낌이에요. 이게 진짜 필요한 앱이었구나 싶었어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">준혁</div>
+          <div><p class="review-name">정준혁</p><p class="review-meta">31세 · 마케터</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"텍스트 감정 앱은 다 써봤는데 다 3주를 못 넘겼어요. 디어로그는 말하는 게 자연스러워서 그런지 아직도 쓰고 있어요. 리텐션 대박."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">예린</div>
+          <div><p class="review-name">윤예린</p><p class="review-meta">26세 · 기획자</p></div>
+        </div>
+      </div>
+      <!-- duplicate for loop -->
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"일기 쓰는 게 너무 귀찮아서 항상 중간에 포기했는데, 그냥 말만 하면 된다니까 신기하게도 매일 하게 됐어요. 한 달째 연속 기록 중입니다."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.2);color:#b8a9ff">지은</div>
+          <div><p class="review-name">이지은</p><p class="review-meta">25세 · 직장인</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"저는 감정 표현이 서투른 편인데, 말하고 나면 AI가 제가 몰랐던 감정까지 짚어줘요. '오늘 불안감이 높았네요'라고 했을 때 진짜 소름 돋았어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.2);color:#8db4a0">민준</div>
+          <div><p class="review-name">박민준</p><p class="review-meta">28세 · 대학원생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"늦은 밤에 혼자 있을 때 마음이 답답한데 아무한테도 연락하기가 미안하잖아요. 디어로그한테 털어놓고 나면 진짜 가벼워져요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(240,235,227,0.1);color:#e0d8cc">수아</div>
+          <div><p class="review-name">김수아</p><p class="review-meta">23세 · 대학생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
+        <p class="review-text">"그림일기 기능이 너무 귀여워요. 오늘 제 감정이 연보라 하늘 아래 작은 행성으로 그려졌는데... 이상하게 위로가 됐어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">하린</div>
+          <div><p class="review-name">최하린</p><p class="review-meta">22세 · 디자인 전공</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"회사 다니면서 감정을 그냥 눌러놓고 살았는데, 퇴근하고 5분만 얘기해도 하루가 정리되는 느낌이에요. 이게 진짜 필요한 앱이었구나 싶었어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">준혁</div>
+          <div><p class="review-name">정준혁</p><p class="review-meta">31세 · 마케터</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"텍스트 감정 앱은 다 써봤는데 다 3주를 못 넘겼어요. 디어로그는 말하는 게 자연스러워서 그런지 아직도 쓰고 있어요. 리텐션 대박."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">예린</div>
+          <div><p class="review-name">윤예린</p><p class="review-meta">26세 · 기획자</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 (reverse) -->
+    <div class="reviews-row reverse">
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"자취하면서 외로울 때마다 괜찮은 척 살았는데, 이 앱이랑 얘기하면서 제가 생각보다 많이 지쳐있었구나 알게 됐어요. 뭔가 고맙더라고요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(216,90,48,0.15);color:#f0a080">다은</div>
+          <div><p class="review-name">서다은</p><p class="review-meta">24세 · 간호학과</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"심리 상담 받고 싶은데 돈도 시간도 없는 사람들한테 딱인 것 같아요. 완벽한 대체재는 아니어도 일상 관리용으로는 진짜 최고예요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.2);color:#b8a9ff">재원</div>
+          <div><p class="review-name">한재원</p><p class="review-meta">29세 · 프리랜서</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
+        <p class="review-text">"음악 추천이 생각보다 너무 잘 맞아요. 슬플 때 막 신나는 노래 추천 같은 거 아니고, 진짜 그 감정에 맞는 분위기 음악이 나와서 신기했어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.2);color:#8db4a0">지혜</div>
+          <div><p class="review-name">임지혜</p><p class="review-meta">27세 · 교육 종사자</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"한 달치 감정 리포트 봤는데 진짜 패턴이 보이더라고요. 월요일마다 불안감 수치가 높고 금요일에 확 낮아지는 거 보면서 저 스스로도 몰랐던 걸 알게 됐어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">승현</div>
+          <div><p class="review-name">조승현</p><p class="review-meta">33세 · 개발자</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"친구한테 오늘 디어로그 써봤어? 물어봤더니 이미 쓰고 있더라고요. 요즘 주변에 쓰는 사람들이 늘고 있는 것 같아서 더 믿음직스러워요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">나은</div>
+          <div><p class="review-name">백나은</p><p class="review-meta">26세 · 대학원생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"목소리로 감정을 읽는다는 게 처음엔 반신반의했는데, 정말로 제가 말하는 방식에서 뭔가를 잡아내더라고요. 기술이 신기하면서도 좀 무섭기도 해요 (좋은 의미로)."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">시우</div>
+          <div><p class="review-name">강시우</p><p class="review-meta">30세 · 연구원</p></div>
+        </div>
+      </div>
+      <!-- duplicate -->
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"자취하면서 외로울 때마다 괜찮은 척 살았는데, 이 앱이랑 얘기하면서 제가 생각보다 많이 지쳐있었구나 알게 됐어요. 뭔가 고맙더라고요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(216,90,48,0.15);color:#f0a080">다은</div>
+          <div><p class="review-name">서다은</p><p class="review-meta">24세 · 간호학과</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"심리 상담 받고 싶은데 돈도 시간도 없는 사람들한테 딱인 것 같아요. 완벽한 대체재는 아니어도 일상 관리용으로는 진짜 최고예요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.2);color:#b8a9ff">재원</div>
+          <div><p class="review-name">한재원</p><p class="review-meta">29세 · 프리랜서</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
+        <p class="review-text">"음악 추천이 생각보다 너무 잘 맞아요. 슬플 때 막 신나는 노래 추천 같은 거 아니고, 진짜 그 감정에 맞는 분위기 음악이 나와서 신기했어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.2);color:#8db4a0">지혜</div>
+          <div><p class="review-name">임지혜</p><p class="review-meta">27세 · 교육 종사자</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"한 달치 감정 리포트 봤는데 진짜 패턴이 보이더라고요. 월요일마다 불안감 수치가 높고 금요일에 확 낮아지는 거 보면서 저 스스로도 몰랐던 걸 알게 됐어요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">승현</div>
+          <div><p class="review-name">조승현</p><p class="review-meta">33세 · 개발자</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"친구한테 오늘 디어로그 써봤어? 물어봤더니 이미 쓰고 있더라고요. 요즘 주변에 쓰는 사람들이 늘고 있는 것 같아서 더 믿음직스러워요."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">나은</div>
+          <div><p class="review-name">백나은</p><p class="review-meta">26세 · 대학원생</p></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <p class="review-text">"목소리로 감정을 읽는다는 게 처음엔 반신반의했는데, 정말로 제가 말하는 방식에서 뭔가를 잡아내더라고요. 기술이 신기하면서도 좀 무섭기도 해요 (좋은 의미로)."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">시우</div>
+          <div><p class="review-name">강시우</p><p class="review-meta">30세 · 연구원</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section" id="cta">
+  <h2 class="reveal">목소리가 전하는 진심,<br><em>디어로그</em>가 연결합니다</h2>
+  <p class="reveal">출시 알림을 신청하시면 가장 먼저 소식을 전해드립니다.</p>
+  <form class="cta-form reveal" onsubmit="handleSubmit(event)">
+    <input type="email" placeholder="이메일 주소 입력" required>
+    <button type="submit">알림 받기</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Dearlog.</div>
+  <div class="footer-info">
+    대표자: 김발해 &nbsp;|&nbsp; dearlogofficial@gmail.com<br>
+    © 2026 Dearlog Inc. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   1. STARS CANVAS
+══════════════════════════════════════════ */
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 150; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.3 + 0.2,
+      speed: Math.random() * 0.007 + 0.002,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    const alpha = (Math.sin(t * s.speed + s.phase) + 1) / 2 * 0.55 + 0.08;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resize(); initStars(); requestAnimationFrame(drawStars);
+window.addEventListener('resize', () => { resize(); initStars(); });
+
+/* ══════════════════════════════════════════
+   2. CURSOR TRAIL
+══════════════════════════════════════════ */
+const isMobile = window.matchMedia('(max-width:900px)').matches;
+if (!isMobile) {
+  const COLORS = ['rgba(107,78,255,', 'rgba(184,169,255,', 'rgba(141,180,160,', 'rgba(240,235,227,'];
+  let lastX = 0, lastY = 0, frameId;
+
+  document.addEventListener('mousemove', e => {
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    if (Math.abs(dx) + Math.abs(dy) < 3) return;
+    lastX = e.clientX; lastY = e.clientY;
+
+    cancelAnimationFrame(frameId);
+    frameId = requestAnimationFrame(() => {
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'cursor-dot';
+        const size = Math.random() * 8 + 4;
+        const life = (Math.random() * 400 + 300) + 'ms';
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        dot.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${e.clientX + (Math.random()-0.5)*12}px;
+          top:${e.clientY + (Math.random()-0.5)*12}px;
+          background:${color}0.7);
+          --life:${life};
+          margin-left:-${size/2}px; margin-top:-${size/2}px;
+        `;
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), parseFloat(life));
+      }
+    });
+  });
+}
+
+/* ══════════════════════════════════════════
+   3. PHONE TILT (mouse parallax)
+══════════════════════════════════════════ */
+if (!isMobile) {
+  const phoneEl = document.querySelector('.phone');
+  const phoneWrap = document.querySelector('.phone-wrap');
+  if (phoneEl && phoneWrap) {
+    document.addEventListener('mousemove', e => {
+      const rect = phoneWrap.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / window.innerWidth;
+      const dy = (e.clientY - cy) / window.innerHeight;
+      const tiltX = dy * -14;
+      const tiltY = dx * 14;
+      phoneEl.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(${Math.sin(Date.now()/1000)*6}px)`;
+    });
+    document.addEventListener('mouseleave', () => {
+      phoneEl.style.transform = '';
+    });
+  }
+}
+
+/* ══════════════════════════════════════════
+   4. PHONE IMAGE CYCLE
+══════════════════════════════════════════ */
+const phoneImgs = ['메인 홈-2.png', '메인 홈-전화올때.png', '전화 대화중.png', '분석 탭-full.png'];
+let imgIdx = 0;
+const phoneImg = document.getElementById('phoneImg');
+setInterval(() => {
+  phoneImg.style.opacity = '0';
+  setTimeout(() => {
+    imgIdx = (imgIdx + 1) % phoneImgs.length;
+    phoneImg.src = phoneImgs[imgIdx];
+    phoneImg.style.opacity = '1';
+  }, 500);
+}, 3500);
+
+/* ══════════════════════════════════════════
+   5. WAVEFORM INTERACTION
+══════════════════════════════════════════ */
+const waveform = document.getElementById('waveform');
+const waveLabel = document.getElementById('waveLabel');
+const waveWrap = document.getElementById('waveWrap');
+const BAR_COUNT = 28;
+const emotions = ['기쁨', '차분함', '설렘', '피곤함', '불안', '슬픔'];
+const emotionColors = {
+  '기쁨':   '#f5c842',
+  '차분함': '#8db4a0',
+  '설렘':   '#b8a9ff',
+  '피곤함': '#888',
+  '불안':   '#f0a080',
+  '슬픔':   '#6b9fff',
+};
+
+// Build bars
+for (let i = 0; i < BAR_COUNT; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'waveform-bar';
+  const h = Math.random() * 28 + 8;
+  bar.style.height = h + 'px';
+  bar.style.setProperty('--spd', (Math.random() * 0.4 + 0.25) + 's');
+  bar.style.animationDelay = (i * 0.04) + 's';
+  waveform.appendChild(bar);
+}
+
+let waveActive = false;
+let waveTimer;
+let waveAnimFrame;
+
+function animateBars() {
+  const bars = waveform.querySelectorAll('.waveform-bar');
+  bars.forEach(b => {
+    b.style.height = (Math.random() * 30 + 6) + 'px';
+  });
+  waveAnimFrame = setTimeout(animateBars, 80);
+}
+
+function stopWave() {
+  waveActive = false;
+  clearTimeout(waveTimer);
+  clearTimeout(waveAnimFrame);
+  waveform.classList.remove('active');
+  waveLabel.classList.remove('active');
+  waveLabel.textContent = '클릭해서 체험해보세요';
+  waveform.querySelectorAll('.waveform-bar').forEach(b => {
+    b.style.background = 'var(--lavender)';
+    b.style.height = (Math.random() * 28 + 8) + 'px';
+  });
+}
+
+waveWrap.addEventListener('click', () => {
+  if (waveActive) { stopWave(); return; }
+  waveActive = true;
+  waveform.classList.add('active');
+  waveLabel.classList.add('active');
+
+  // Pick random emotion
+  const emo = emotions[Math.floor(Math.random() * emotions.length)];
+  const col = emotionColors[emo];
+  waveform.querySelectorAll('.waveform-bar').forEach(b => b.style.background = col);
+
+  // Animate label
+  waveLabel.textContent = '분석 중...';
+  animateBars();
+
+  setTimeout(() => {
+    clearTimeout(waveAnimFrame);
+    waveLabel.textContent = `감정: ${emo} 감지됨`;
+    waveform.querySelectorAll('.waveform-bar').forEach((b, i) => {
+      b.style.height = (Math.random() * 24 + 8) + 'px';
+    });
+  }, 1800);
+
+  waveTimer = setTimeout(stopWave, 5000);
+});
+waveWrap.style.cursor = 'pointer';
+
+/* ══════════════════════════════════════════
+   6. FEAT CARD PARALLAX ON SCROLL
+══════════════════════════════════════════ */
+if (!isMobile) {
+  const featCards = document.querySelectorAll('.feat-card');
+  function onScroll() {
+    const scrollY = window.scrollY;
+    featCards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2 - window.innerHeight / 2;
+      const shift = centerY * 0.018 * (i % 2 === 0 ? 1 : -1);
+      card.style.transform = `translateY(${shift}px)`;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+/* ══════════════════════════════════════════
+   7. SCROLL PROGRESS BAR
+══════════════════════════════════════════ */
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  progress.style.width = pct + '%';
+}, { passive: true });
+
+/* ══════════════════════════════════════════
+   8. REVEAL ON SCROLL
+══════════════════════════════════════════ */
+const reveals = document.querySelectorAll('.reveal');
+const revObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      revObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(r => revObserver.observe(r));
+
+/* ══════════════════════════════════════════
+   9. FORM SUBMIT
+══════════════════════════════════════════ */
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const orig = btn.textContent;
+  btn.textContent = '등록됐어요 ✓';
+  btn.style.background = '#26de81';
+  btn.style.color = '#0a0a0f';
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.style.background = '';
+    btn.style.color = '';
+    e.target.reset();
+  }, 3000);
+}
+
+/* ══════════════════════════════════════════
+   10. SMOOTH SCROLL
+══════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
 </body>
 </html>
