@@ -256,7 +256,7 @@ section { position: relative; z-index: 1; }
 /* ── 1179x2556 비율 완벽 대응 ── */
 .phone { 
   width: 280px; 
-  aspect-ratio: 1179 / 2556; /* 세로 규격 자동 매칭 */
+  aspect-ratio: 1179 / 2556; 
   background: #0d0d12; 
   border-radius: 42px; 
   border: 1.5px solid rgba(255,255,255,0.12); 
@@ -294,7 +294,7 @@ section { position: relative; z-index: 1; }
 .quote-section blockquote em { font-style: italic; color: var(--lavender); }
 .quote-sub { margin-top: 32px; font-size: 1.1rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; }
 
-/* ── FEATURES ── */
+/* ── FEATURES (수직 리스트 레이아웃) ── */
 .features-section { padding: 80px 48px 140px; overflow: hidden; }
 .features-header { max-width: 1000px; margin: 0 auto 100px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
 .features-header h2 { font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.03em; max-width: 500px; word-break: keep-all; }
@@ -317,7 +317,7 @@ section { position: relative; z-index: 1; }
 .feat-title { font-family: 'Gowun Batang', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.3; margin-bottom: 24px; word-break: keep-all; color: #fff; }
 .feat-desc { font-size: 1.15rem; color: rgba(255,255,255,0.85); line-height: 1.75; font-weight: 300; word-break: keep-all; }
 
-/* ── 1179x2556 비율 완벽 대응 (고정된 높이 제거) ── */
+/* ── 1179x2556 비율 완벽 대응 ── */
 .feat-img-wrap { 
   flex-shrink: 0; 
   border-radius: 36px; 
@@ -326,16 +326,15 @@ section { position: relative; z-index: 1; }
   overflow: hidden; 
   position: relative; 
   box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-  aspect-ratio: 1179 / 2556; /* 세로 규격 자동 매칭 */
+  aspect-ratio: 1179 / 2556; 
 }
 .feat-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
-/* 기능별 목업 스케일링 (너비만 지정하면 높이는 aspect-ratio에 의해 원본비율로 자동계산됨) */
 .scale-default { width: 300px; }
 .scale-up { width: 340px; } 
 .scale-down { width: 280px; }
 
-/* ── TECH SECTION ── */
+/* ── TECH SECTION (고급화 및 하단 태그 추가) ── */
 .tech-section { padding: 120px 48px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); }
 .tech-inner { max-width: 1200px; margin: 0 auto; }
 .tech-header { text-align: center; margin-bottom: 80px; }
@@ -343,14 +342,36 @@ section { position: relative; z-index: 1; }
 .section-label::before, .section-label::after { content: ''; display: block; width: 20px; height: 1px; background: var(--lavender); opacity: 0.5; }
 .tech-header h2 { font-family: 'Gowun Batang', serif; font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 700; line-height: 1.3; letter-spacing: -0.03em; margin-bottom: 20px; word-break: keep-all; }
 .tech-header p { font-size: 1.1rem; color: rgba(255,255,255,0.7); max-width: 560px; margin: 0 auto; line-height: 1.7; font-weight: 300; word-break: keep-all; }
+
 .tech-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.tech-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 40px 32px; transition: border-color 0.3s; position: relative; overflow: hidden; }
+.tech-card { 
+  background: rgba(255,255,255,0.03); 
+  border: 1px solid rgba(255,255,255,0.07); 
+  border-radius: 20px; 
+  padding: 40px 32px; 
+  transition: border-color 0.3s; 
+  position: relative; 
+  overflow: hidden; 
+  display: flex; /* 하단 태그 정렬을 위한 Flexbox */
+  flex-direction: column;
+  justify-content: space-between;
+}
+.tech-card-content { flex: 1; }
 .tech-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--violet), transparent); opacity: 0; transition: opacity 0.3s; }
 .tech-card:hover { border-color: rgba(107,78,255,0.25); }
 .tech-card:hover::before { opacity: 1; }
 .tech-icon { width: 48px; height: 48px; background: rgba(107,78,255,0.12); border: 1px solid rgba(107,78,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 28px; font-size: 1.4rem; }
 .tech-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.01em; color: #fff; }
 .tech-card p { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; word-break: keep-all; }
+
+/* 카드 하단 얇고 흐린 영문 태그 */
+.tech-sub-tag { 
+  margin-top: 32px; 
+  font-size: 0.75rem; 
+  letter-spacing: 0.05em; 
+  color: rgba(255,255,255,0.25); 
+  font-family: 'DM Sans', sans-serif; 
+}
 
 /* ── REVIEWS ── */
 .reviews-section { padding: 120px 48px; overflow: hidden; }
@@ -423,7 +444,7 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
   .hero-form button { background: var(--violet); border: none; }
   .hero-stores { justify-content: center; }
   .phone-wrap { order: -1; }
-  .phone { width: 240px; } /* 높이는 자동계산 */
+  .phone { width: 240px; }
   
   .features-section { padding: 60px 24px 100px; }
   .features-header { flex-direction: column; align-items: flex-start; margin-bottom: 60px; }
@@ -624,25 +645,36 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
   <div class="tech-inner">
     <div class="tech-header reveal">
       <p class="section-label">Our Core Technology</p>
-      <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
-      <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <strong style="color:rgba(255,255,255,0.95); font-weight:500;">목소리의 떨림(Tone)</strong>까지 듣습니다.</p>
+      <h2>음성 분석 멘탈케어 플랫폼</h2>
+      <p>Dearlog는 대화 내용뿐 아니라 목소리의 톤, 속도, 멈춤 같은 비언어적 단서까지 함께 참고해 감정의 흐름을 더 입체적으로 해석합니다.</p>
     </div>
 
     <div class="tech-cards">
       <div class="tech-card reveal">
-        <div class="tech-icon">🧬</div>
-        <h3>자체 모델 파인튜닝</h3>
-        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--lavender);font-weight:400">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
+        <div class="tech-card-content">
+          <div class="tech-icon">🧬</div>
+          <h3>자체 모델 파인튜닝</h3>
+          <p>한국어 감정 표현 데이터셋을 기반으로 <span style="color:var(--lavender);font-weight:500">자체모델</span>을 지속적으로 학습시켜, 단순 긍·부정이 아닌 미묘한 감정 변화까지 더 정교하게 포착합니다.</p>
+        </div>
+        <div class="tech-sub-tag">Korean Emotion Dataset Fine-tuning</div>
       </div>
+      
       <div class="tech-card reveal">
-        <div class="tech-icon">📊</div>
-        <h3>음성 바이오마커</h3>
-        <p>국내 최초로 음성 바이오마커 분석을 도입하여 객관적인 감정 리포트를 시각화하여 제공합니다.</p>
+        <div class="tech-card-content">
+          <div class="tech-icon">📊</div>
+          <h3>음성 바이오마커</h3>
+          <p>발화 속도, 음높이, 침묵 구간, 반복 패턴 등 <span style="color:var(--lavender);font-weight:500">음성 신호</span>를 참고해 사용자의 감정 흐름을 더 입체적으로 분석합니다.</p>
+        </div>
+        <div class="tech-sub-tag">Tone Tempo Pause</div>
       </div>
+      
       <div class="tech-card reveal">
-        <div class="tech-icon">🎵</div>
-        <h3>맞춤형 알고리즘</h3>
-        <p>단순 추천이 아닌, 심리학적 근거를 바탕으로 설계된 감정 상태(Audio)와 대화 내용(Text) 결합 알고리즘이 당신의 정서적 회복을 돕습니다.</p>
+        <div class="tech-card-content">
+          <div class="tech-icon">🎵</div>
+          <h3>맞춤형 알고리즘</h3>
+          <p>단순 추천이 아닌, <span style="color:var(--lavender);font-weight:500">심리학적 근거</span>를 바탕으로 설계된 감정 상태(Audio)와 대화 내용(Text) 결합 알고리즘이 당신의 정서적 회복을 돕습니다.</p>
+        </div>
+        <div class="tech-sub-tag">Audio + Text Personalization</div>
       </div>
     </div>
   </div>
@@ -908,7 +940,7 @@ if (!isMobile) {
 }
 
 /* ══════════════════════════════════════════
-   4. 메인 홈 화면 슬라이드
+   4. 메인 홈 화면 슬라이드 (진동 효과 포함)
 ══════════════════════════════════════════ */
 const heroPhone = document.getElementById('heroPhone');
 if (heroPhone) {
@@ -1057,7 +1089,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 /* ══════════════════════════════════════════
-   10. CARD IMAGE CYCLE
+   10. CARD IMAGE CYCLE 
 ══════════════════════════════════════════ */
 function setupFadeSlider(wrapId) {
   const wrap = document.getElementById(wrapId);
