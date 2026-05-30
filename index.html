@@ -4,8 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dearlog — 목소리로 읽는 감정</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" crossorigin="anonymous">
+
 <style>
 :root {
   --ink: #0a0a0f;
@@ -25,11 +29,18 @@
 
 html { scroll-behavior: smooth; }
 
+/* 본문은 가독성 높은 Pretendard로 교체 */
 body {
   background: var(--ink);
   color: #fff;
-  font-family: 'DM Sans', 'Gowun Dodum', sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   overflow-x: hidden;
+  font-weight: 300;
+}
+
+/* 대제목과 감성 문구는 명조체 계열 유지 */
+h1, h2, h3, blockquote, .serif {
+  font-family: 'Gowun Batang', 'DM Serif Display', serif;
 }
 
 /* ── NOISE TEXTURE OVERLAY ── */
@@ -79,16 +90,18 @@ nav {
   list-style: none;
 }
 .nav-links a {
-  font-size: 0.875rem;
-  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
   text-decoration: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
   transition: color 0.25s;
 }
 .nav-links a:hover { color: #fff; }
 
 .nav-badge {
   font-size: 0.75rem;
+  font-weight: 500;
   color: var(--sage);
   border: 1px solid rgba(141,180,160,0.4);
   padding: 5px 14px;
@@ -142,8 +155,9 @@ section { position: relative; z-index: 1; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   color: var(--lavender);
   text-transform: uppercase;
   margin-bottom: 28px;
@@ -156,62 +170,72 @@ section { position: relative; z-index: 1; }
 }
 
 .hero h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(3rem, 5.5vw, 5rem);
+  font-size: clamp(3.5rem, 5.5vw, 5.5rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   word-break: keep-all;
 }
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--lavender);
-}
+.hero h1 em { font-style: italic; color: var(--lavender); }
 
 .hero-sub {
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.75;
+  font-size: 1.15rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  font-weight: 300;
   max-width: 480px;
   margin-bottom: 48px;
   word-break: keep-all;
 }
 
-.hero-form {
+/* ── CTA FORMS (일체화된 프리미엄 폼) ── */
+.hero-form, .cta-form {
   display: flex;
-  gap: 10px;
-  max-width: 420px;
-}
-.hero-form input {
-  flex: 1;
-  background: rgba(255,255,255,0.07);
+  gap: 4px;
+  max-width: 460px;
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 100px;
+  padding: 6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.hero-form:focus-within, .cta-form:focus-within {
+  border-color: rgba(107, 78, 255, 0.6);
+  box-shadow: 0 0 24px rgba(107, 78, 255, 0.2);
+}
+.hero-form input, .cta-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
   padding: 14px 22px;
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-family: inherit;
+  font-weight: 300;
   outline: none;
-  transition: border-color 0.25s, background 0.25s;
 }
-.hero-form input::placeholder { color: rgba(255,255,255,0.3); }
-.hero-form input:focus { border-color: var(--violet); background: rgba(107,78,255,0.08); }
-.hero-form button {
+.hero-form input::placeholder, .cta-form input::placeholder { color: rgba(255,255,255,0.3); }
+.hero-form button, .cta-form button {
   background: var(--violet);
   color: #fff;
   border: none;
   border-radius: 100px;
-  padding: 14px 24px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
 }
-.hero-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,78,255,0.4); }
+.hero-form button:hover, .cta-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107,78,255,0.5);
+}
+.cta-form button { background: #fff; color: var(--ink); }
+.cta-form button:hover { box-shadow: 0 8px 24px rgba(255,255,255,0.4); }
 
 .hero-stores {
   display: flex;
@@ -219,21 +243,33 @@ section { position: relative; z-index: 1; }
   margin-top: 24px;
   align-items: center;
 }
-.hero-stores span { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+.hero-stores span { font-size: 0.85rem; color: rgba(255,255,255,0.3); font-weight: 400; }
 .store-pill {
-  display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 8px 16px; font-size: 0.8rem; color: rgba(255,255,255,0.6); cursor: pointer; transition: background 0.2s, color 0.2s;
+  display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 8px 18px; font-size: 0.85rem; font-weight: 400; color: rgba(255,255,255,0.7); cursor: pointer; transition: background 0.2s, color 0.2s;
 }
 .store-pill:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.store-pill img { width: 16px; height: 16px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.7; }
+.store-pill img { width: 16px; height: 16px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.8; }
 
 .phone-wrap { position: relative; display: flex; justify-content: center; }
 .phone-glow { position: absolute; width: 320px; height: 500px; background: radial-gradient(ellipse, rgba(107,78,255,0.25) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-.phone { width: 280px; height: 560px; background: #0d0d12; border-radius: 42px; border: 1.5px solid rgba(255,255,255,0.12); overflow: hidden; position: relative; box-shadow: 0 0 0 6px rgba(255,255,255,0.03), 0 40px 80px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,0,0,0.4); animation: float 6s ease-in-out infinite; }
+
+/* ── 1179x2556 비율 완벽 대응 ── */
+.phone { 
+  width: 280px; 
+  aspect-ratio: 1179 / 2556; /* 세로 규격 자동 매칭 */
+  background: #0d0d12; 
+  border-radius: 42px; 
+  border: 1.5px solid rgba(255,255,255,0.12); 
+  overflow: hidden; 
+  position: relative; 
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.03), 0 40px 80px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,0,0,0.4); 
+  animation: float 6s ease-in-out infinite; 
+}
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
+.phone img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.5s ease; }
 .phone::before { content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 80px; height: 22px; background: #0d0d12; border-radius: 20px; z-index: 10; }
 
-/* ── 전화 오는 진동 애니메이션 (추가된 부분) ── */
 @keyframes callVibrate {
   0%   { transform: translateX(0); }
   2%   { transform: translateX(-3px); }
@@ -243,97 +279,115 @@ section { position: relative; z-index: 1; }
   10%  { transform: translateX(0); }
   100% { transform: translateX(0); }
 }
-.ringing {
-  animation: callVibrate 2s ease-in-out infinite !important;
-}
+.ringing { animation: callVibrate 2s ease-in-out infinite !important; }
 
 /* ── MARQUEE ── */
 .marquee-section { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
 .marquee-track { display: flex; gap: 60px; animation: marquee 20s linear infinite; width: max-content; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.marquee-item { display: flex; align-items: center; gap: 12px; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); white-space: nowrap; }
+.marquee-item { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); white-space: nowrap; }
 .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--violet); opacity: 0.6; }
 
 /* ── QUOTE ── */
 .quote-section { padding: 140px 48px; text-align: center; }
-.quote-section blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 400; line-height: 1.4; letter-spacing: -0.02em; max-width: 760px; margin: 0 auto; color: rgba(255,255,255,0.88); word-break: keep-all; }
+.quote-section blockquote { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.4; letter-spacing: -0.02em; max-width: 760px; margin: 0 auto; color: rgba(255,255,255,0.95); word-break: keep-all; }
 .quote-section blockquote em { font-style: italic; color: var(--lavender); }
-.quote-sub { margin-top: 32px; font-size: 0.95rem; color: rgba(255,255,255,0.4); line-height: 1.7; }
+.quote-sub { margin-top: 32px; font-size: 1.1rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; }
 
-/* ── FEATURES (수직 리스트 레이아웃) ── */
-.features-section { padding: 80px 48px 140px; }
+/* ── FEATURES ── */
+.features-section { padding: 80px 48px 140px; overflow: hidden; }
 .features-header { max-width: 1000px; margin: 0 auto 100px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
-.features-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.15; letter-spacing: -0.03em; max-width: 500px; word-break: keep-all; }
-.features-header p { font-size: 0.95rem; color: rgba(255,255,255,0.4); max-width: 300px; line-height: 1.7; word-break: keep-all; }
+.features-header h2 { font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.03em; max-width: 500px; word-break: keep-all; }
+.features-header p { font-size: 1.05rem; color: rgba(255,255,255,0.6); max-width: 340px; line-height: 1.7; font-weight: 300; word-break: keep-all; }
 
-.feat-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 160px; }
-.feat-row { display: flex; align-items: center; gap: 80px; }
+.feat-list { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 180px; }
+.feat-row { position: relative; display: flex; align-items: center; gap: 80px; }
+
+/* 배경 Ambient Glow */
+.feat-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; top: 50%; transform: translateY(-50%); pointer-events: none; z-index: -1; }
+.feat-row:nth-child(1) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(0, 102, 255, 0.12) 0%, transparent 60%); }
+.feat-row:nth-child(2) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(255, 102, 204, 0.1) 0%, transparent 60%); }
+.feat-row:nth-child(3) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(255, 204, 0, 0.08) 0%, transparent 60%); }
+.feat-row:nth-child(4) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(255, 102, 51, 0.1) 0%, transparent 60%); }
+.feat-row:nth-child(5) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(0, 204, 102, 0.1) 0%, transparent 60%); }
+.feat-row:nth-child(6) .feat-glow { right: -10%; background: radial-gradient(circle, rgba(0, 255, 255, 0.08) 0%, transparent 60%); }
+
 .feat-text { flex: 1; }
-.feat-tag { display: inline-block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lavender); margin-bottom: 16px; opacity: 0.8; }
-.feat-num { font-size: 0.8rem; color: rgba(255,255,255,0.2); font-variant-numeric: tabular-nums; margin-bottom: 8px; }
-.feat-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; font-weight: 400; line-height: 1.2; margin-bottom: 20px; word-break: keep-all; }
-.feat-desc { font-size: 1.05rem; color: rgba(255,255,255,0.45); line-height: 1.75; word-break: keep-all; }
+.feat-label { display: inline-block; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.15em; color: var(--lavender); margin-bottom: 20px; border-bottom: 1px solid rgba(184,169,255,0.3); padding-bottom: 6px; text-transform: uppercase; }
+.feat-title { font-family: 'Gowun Batang', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.3; margin-bottom: 24px; word-break: keep-all; color: #fff; }
+.feat-desc { font-size: 1.15rem; color: rgba(255,255,255,0.85); line-height: 1.75; font-weight: 300; word-break: keep-all; }
 
-.feat-img-wrap { width: 300px; height: 640px; flex-shrink: 0; border-radius: 36px; border: 10px solid #1a1a24; background: #0d0d12; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+/* ── 1179x2556 비율 완벽 대응 (고정된 높이 제거) ── */
+.feat-img-wrap { 
+  flex-shrink: 0; 
+  border-radius: 36px; 
+  border: 10px solid #1a1a24; 
+  background: #0d0d12; 
+  overflow: hidden; 
+  position: relative; 
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+  aspect-ratio: 1179 / 2556; /* 세로 규격 자동 매칭 */
+}
 .feat-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+/* 기능별 목업 스케일링 (너비만 지정하면 높이는 aspect-ratio에 의해 원본비율로 자동계산됨) */
+.scale-default { width: 300px; }
+.scale-up { width: 340px; } 
+.scale-down { width: 280px; }
 
 /* ── TECH SECTION ── */
 .tech-section { padding: 120px 48px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); }
 .tech-inner { max-width: 1200px; margin: 0 auto; }
 .tech-header { text-align: center; margin-bottom: 80px; }
-.section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--lavender); text-transform: uppercase; margin-bottom: 24px; opacity: 0.8; }
+.section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.2em; color: var(--lavender); text-transform: uppercase; margin-bottom: 24px; opacity: 0.8; }
 .section-label::before, .section-label::after { content: ''; display: block; width: 20px; height: 1px; background: var(--lavender); opacity: 0.5; }
-.tech-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 20px; word-break: keep-all; }
-.tech-header p { font-size: 1rem; color: rgba(255,255,255,0.45); max-width: 560px; margin: 0 auto; line-height: 1.7; word-break: keep-all; }
+.tech-header h2 { font-family: 'Gowun Batang', serif; font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 700; line-height: 1.3; letter-spacing: -0.03em; margin-bottom: 20px; word-break: keep-all; }
+.tech-header p { font-size: 1.1rem; color: rgba(255,255,255,0.7); max-width: 560px; margin: 0 auto; line-height: 1.7; font-weight: 300; word-break: keep-all; }
 .tech-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .tech-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 40px 32px; transition: border-color 0.3s; position: relative; overflow: hidden; }
 .tech-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--violet), transparent); opacity: 0; transition: opacity 0.3s; }
 .tech-card:hover { border-color: rgba(107,78,255,0.25); }
 .tech-card:hover::before { opacity: 1; }
 .tech-icon { width: 48px; height: 48px; background: rgba(107,78,255,0.12); border: 1px solid rgba(107,78,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 28px; font-size: 1.4rem; }
-.tech-card h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 14px; letter-spacing: -0.01em; }
-.tech-card p { font-size: 0.9rem; color: rgba(255,255,255,0.42); line-height: 1.7; word-break: keep-all; }
+.tech-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.01em; color: #fff; }
+.tech-card p { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; word-break: keep-all; }
 
 /* ── REVIEWS ── */
 .reviews-section { padding: 120px 48px; overflow: hidden; }
 .reviews-inner { max-width: 1200px; margin: 0 auto; }
 .reviews-header { text-align: center; margin-bottom: 64px; }
-.reviews-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; letter-spacing: -0.03em; margin-bottom: 14px; word-break: keep-all; }
-.reviews-header p { font-size: 0.95rem; color: rgba(255,255,255,0.4); }
+.reviews-header h2 { font-family: 'Gowun Batang', serif; font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 14px; word-break: keep-all; }
+.reviews-header p { font-size: 1.05rem; color: rgba(255,255,255,0.6); font-weight: 300; }
 .reviews-track-wrap { position: relative; }
-.reviews-track-wrap::before, .reviews-track-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none; }
+.reviews-track-wrap::before, .reviews-track-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none; }
 .reviews-track-wrap::before { left: 0; background: linear-gradient(to right, var(--ink), transparent); }
 .reviews-track-wrap::after { right: 0; background: linear-gradient(to left, var(--ink), transparent); }
-.reviews-row { display: flex; gap: 16px; width: max-content; animation: slideReviews 35s linear infinite; }
-.reviews-row.reverse { animation: slideReviewsReverse 40s linear infinite; margin-top: 16px; }
+.reviews-row { display: flex; gap: 20px; width: max-content; animation: slideReviews 40s linear infinite; }
+.reviews-row.reverse { animation: slideReviewsReverse 45s linear infinite; margin-top: 20px; }
 @keyframes slideReviews { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes slideReviewsReverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-.review-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px 28px 24px; width: 300px; flex-shrink: 0; transition: border-color 0.3s; position: relative; }
-.review-card:hover { border-color: rgba(184,169,255,0.25); }
-.review-stars { display: flex; gap: 3px; margin-bottom: 14px; }
-.review-stars span { font-size: 0.85rem; color: #f5c842; }
-.review-text { font-size: 0.92rem; line-height: 1.7; color: rgba(255,255,255,0.75); margin-bottom: 20px; word-break: keep-all; }
-.review-author { display: flex; align-items: center; gap: 10px; }
-.review-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 500; flex-shrink: 0; }
-.review-name { font-size: 0.83rem; font-weight: 500; color: rgba(255,255,255,0.6); }
-.review-meta { font-size: 0.75rem; color: rgba(255,255,255,0.28); margin-top: 1px; }
+
+.review-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 36px 36px 32px; width: 420px; flex-shrink: 0; transition: border-color 0.3s, background 0.3s; position: relative; }
+.review-card:hover { border-color: rgba(184,169,255,0.25); background: rgba(255,255,255,0.05); }
+.review-stars { display: flex; gap: 2px; margin-bottom: 16px; }
+.review-stars span { font-size: 0.75rem; color: rgba(245,200,66,0.8); }
+.review-text { font-size: 1.1rem; line-height: 1.7; color: rgba(255,255,255,0.9); margin-bottom: 24px; font-weight: 300; word-break: keep-all; }
+.review-author { display: flex; align-items: center; gap: 12px; }
+.review-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
+.review-name { font-size: 0.9rem; font-weight: 500; color: rgba(255,255,255,0.5); }
+.review-meta { font-size: 0.8rem; font-weight: 300; color: rgba(255,255,255,0.3); margin-top: 2px; }
 
 /* ── FINAL CTA ── */
 .cta-section { padding: 160px 48px; text-align: center; position: relative; overflow: hidden; }
 .cta-section::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(107,78,255,0.15) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-.cta-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 24px; word-break: keep-all; }
-.cta-section h2 em { font-style: italic; color: var(--lavender); }
-.cta-section p { font-size: 1rem; color: rgba(255,255,255,0.4); margin-bottom: 48px; word-break: keep-all; }
-.cta-form { display: flex; gap: 10px; max-width: 400px; margin: 0 auto; }
-.cta-form input { flex: 1; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 100px; padding: 16px 22px; color: #fff; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color 0.25s; }
-.cta-form input:focus { border-color: var(--violet); }
-.cta-form button { background: #fff; color: var(--ink); border: none; border-radius: 100px; padding: 16px 28px; font-size: 0.875rem; font-weight: 500; font-family: inherit; cursor: pointer; white-space: nowrap; transition: transform 0.2s, box-shadow 0.2s; }
-.cta-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.15); }
+.cta-section h2 { font-family: 'Gowun Batang', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 24px; word-break: keep-all; }
+.cta-section h2 em { font-style: italic; color: var(--lavender); font-weight: 400; }
+.cta-section p { font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,0.7); margin-bottom: 48px; word-break: keep-all; }
 
 /* ── FOOTER ── */
 footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
 .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: rgba(255,255,255,0.5); }
-.footer-info { font-size: 0.78rem; color: rgba(255,255,255,0.2); text-align: right; line-height: 1.6; }
+.footer-info { font-size: 0.85rem; font-weight: 300; color: rgba(255,255,255,0.3); text-align: right; line-height: 1.6; }
 
 /* ── REVEAL ANIMATION ── */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -346,7 +400,7 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
 .waveform-bar { width: 3px; border-radius: 2px; background: var(--lavender); opacity: 0.5; transform-origin: center; transition: opacity 0.3s; }
 .waveform.active .waveform-bar { opacity: 1; animation: waveAnim var(--spd) ease-in-out infinite alternate; }
 @keyframes waveAnim { from { transform: scaleY(0.15); } to { transform: scaleY(1); } }
-.waveform-label { font-size: 0.8rem; color: rgba(255,255,255,0.35); letter-spacing: 0.06em; }
+.waveform-label { font-size: 0.85rem; font-weight: 400; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; }
 .waveform-label.active { color: var(--lavender); }
 
 /* ── HERO TEXT ANIMATION ── */
@@ -361,29 +415,38 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
   .nav-links { display: none; }
   .hero { padding: 100px 24px 60px; }
   .hero-inner { grid-template-columns: 1fr; gap: 60px; text-align: center; }
-  .hero h1 { font-size: 2.6rem; }
+  .hero h1 { font-size: 2.8rem; }
   .hero-label { justify-content: center; }
   .hero-sub { margin: 0 auto 48px; }
-  .hero-form { max-width: 100%; }
+  .hero-form { max-width: 100%; flex-direction: column; background: none; border: none; padding: 0; gap: 12px; }
+  .hero-form input, .hero-form button { width: 100%; border-radius: 100px; padding: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); }
+  .hero-form button { background: var(--violet); border: none; }
   .hero-stores { justify-content: center; }
   .phone-wrap { order: -1; }
-  .phone { width: 220px; height: 440px; }
+  .phone { width: 240px; } /* 높이는 자동계산 */
+  
   .features-section { padding: 60px 24px 100px; }
   .features-header { flex-direction: column; align-items: flex-start; margin-bottom: 60px; }
-  .feat-row { flex-direction: column; gap: 40px; text-align: center; }
-  .feat-list { gap: 100px; }
-  .feat-img-wrap { width: 100%; max-width: 300px; margin: 0 auto; }
+  .feat-row { flex-direction: column; gap: 40px; text-align: left; }
+  .feat-list { gap: 120px; }
+  .feat-img-wrap.scale-default, .feat-img-wrap.scale-up, .feat-img-wrap.scale-down { width: 100%; max-width: 320px; margin: 0 auto; }
+  .feat-glow { display: none; }
+  
   .tech-section { padding: 80px 24px; }
   .tech-cards { grid-template-columns: 1fr; }
   .quote-section { padding: 80px 24px; }
-  .quote-section blockquote { font-size: 1.6rem; }
+  .quote-section blockquote { font-size: 1.8rem; }
+  
   .cta-section { padding: 100px 24px; }
-  .cta-form { flex-direction: column; }
-  .cta-form button { width: 100%; }
+  .cta-form { flex-direction: column; background: none; border: none; padding: 0; gap: 12px; }
+  .cta-form input, .cta-form button { width: 100%; border-radius: 100px; padding: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); }
+  .cta-form button { background: #fff; border: none; color: var(--ink); }
+  
   footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
   .footer-info { text-align: center; }
   .reviews-section { padding: 80px 0; }
   .reviews-header { padding: 0 24px; }
+  .review-card { width: 320px; padding: 28px; }
 }
 </style>
 </head>
@@ -408,9 +471,8 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
       <p class="hero-label">AI Mental Care Platform</p>
       <h1>말하면<br><em>알아요.</em></h1>
       <p class="hero-sub">
-        목소리의 떨림에서 진짜 감정을 읽어드립니다.<br>
-        텍스트보다 쉽고, 상담보다 편안한<br>
-        당신만의 감정 기록이 지금 시작됩니다.
+        말하지 못한 하루까지, 목소리로 기록해요. <br>
+        Dearlog는 당신의 말을 듣고 감정과 하루를 일기로 정리합니다.
       </p>
       <form class="hero-form" onsubmit="handleSubmit(event)">
         <input type="email" placeholder="이메일 주소 입력" required>
@@ -434,7 +496,9 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
     <div class="phone-wrap">
       <div class="phone-glow"></div>
       <div class="phone" id="heroPhone">
-        <img src="홈화면.png" alt="홈화면" id="heroPhoneImg" style="width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.5s ease;">
+        <img src="홈화면.png" alt="홈화면" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:1;">
+        <img src="전화1.png" alt="전화1" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:0;">
+        <img src="전화2.png" alt="전화2" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:0;">
       </div>
     </div>
   </div>
@@ -462,7 +526,7 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
 <section class="quote-section reveal">
   <blockquote>
     "오늘 어땠어?" 한 마디면 충분합니다.<br>
-    <em>말하는 것만으로</em> 당신의 감정이<br>기록되고 케어됩니다.
+    <em>말하는 것만으로</em> 당신의 하루가 기록되고, <br>감정이 정리됩니다.
   </blockquote>
   <p class="quote-sub">
     타이핑 없이, 복잡한 설정 없이.<br>
@@ -473,69 +537,84 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
 <section class="features-section" id="features">
   <div class="features-header reveal">
     <h2>일상 속 대화가<br>감정 데이터가 됩니다</h2>
-    <p>텍스트가 담지 못하는 93%의 감정 신호를 목소리에서 직접 읽어냅니다.</p>
+    <p>텍스트만으로는 놓치기 쉬운 감정의 단서까지 목소리의 톤, 속도, 멈춤을 함께 참고해 감정 흐름을 더 입체적으로 바라봅니다.</p>
   </div>
 
   <div class="feat-list">
     <div class="feat-row reveal">
+      <div class="feat-glow"></div>
       <div class="feat-text">
-        <p class="feat-num">01</p>
-        <p class="feat-tag">Zero Typing</p>
+        <div class="feat-label">01 &nbsp;—&nbsp; Zero Typing</div>
         <h3 class="feat-title">입력 없는 기록</h3>
         <p class="feat-desc">번아웃의 순간엔 손가락 하나 움직이는 것도 버겁습니다. 디어로그는 목소리를 실시간으로 기록하고 분석해 기록의 부담을 완전히 없앴습니다.</p>
       </div>
-      <div class="feat-img-wrap">
+      <div class="feat-img-wrap scale-default">
         <img src="전화3.png" alt="전화3">
       </div>
     </div>
 
     <div class="feat-row reveal">
+      <div class="feat-glow"></div>
       <div class="feat-text">
-        <p class="feat-num">02</p>
-        <p class="feat-tag">Unbiased Friend</p>
+        <div class="feat-label">02 &nbsp;—&nbsp; Unbiased Friend</div>
         <h3 class="feat-title">판단하지 않는 친구</h3>
         <p class="feat-desc">누구에게도 말하지 못한 고민, 디어로그는 어떤 선입견도 없이 들어줍니다. 당신의 감정을 판단하지 않고, 오직 당신의 편이 되어주는 가장 안전한 대화 상대를 만나보세요.</p>
       </div>
-      <div class="feat-img-wrap">
+      <div class="feat-img-wrap scale-up">
         <img src="전화4.png" alt="대화 화면 2">
       </div>
     </div>
 
     <div class="feat-row reveal">
+      <div class="feat-glow"></div>
       <div class="feat-text">
-        <p class="feat-num">03</p>
-        <p class="feat-tag">AI Drawing</p>
+        <div class="feat-label">03 &nbsp;—&nbsp; AI Drawing</div>
         <h3 class="feat-title">오늘의 감정을 담은 그림일기</h3>
         <p class="feat-desc">일일이 그리지 않아도 괜찮아요. 당신의 하루 이야기를 듣고 디어로그가 그날의 기분과 감정을 담은 귀여운 일기를 자동으로 생성해 줍니다. 오늘의 하루가 하나의 행성이 되어 우주로 보내집니다.</p>
       </div>
-      <div class="feat-img-wrap" id="scrollWrap3" style="overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
+      <div class="feat-img-wrap scale-default" id="scrollWrap3" style="overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
         <style>#scrollWrap3::-webkit-scrollbar { display: none; }</style>
-        <img src="일기장1.png" alt="일기장 1" style="height:auto; display:block;">
-        <img src="일기장2.png" alt="일기장 2" style="height:auto; display:block;">
+        <img src="일기장1.png" alt="일기장 1" style="height:auto; display:block; object-fit:contain;">
+        <img src="일기장2.png" alt="일기장 2" style="height:auto; display:block; object-fit:contain;">
       </div>
     </div>
 
     <div class="feat-row reveal">
+      <div class="feat-glow"></div>
       <div class="feat-text">
-        <p class="feat-num">04</p>
-        <p class="feat-tag">AI Therapy</p>
+        <div class="feat-label">04 &nbsp;—&nbsp; Shared Diary</div>
+        <h3 class="feat-title">감정을 나누는 익명 일기장</h3>
+        <p class="feat-desc">익명으로 남겨진 다른 사람의 일기를 읽고,<br>조용히 공감하거나 따뜻한 댓글을 남겨보세요.<br>내 감정이 나만의 것이 아니었다는 걸 알게 됩니다.</p>
+      </div>
+      <div class="feat-img-wrap scale-default">
+        <img src="커뮤니티.png" alt="커뮤니티">
+      </div>
+    </div>
+
+    <div class="feat-row reveal">
+      <div class="feat-glow"></div>
+      <div class="feat-text">
+        <div class="feat-label">05 &nbsp;—&nbsp; AI Therapy</div>
         <h3 class="feat-title">심리학 기반 맞춤 테라피</h3>
         <p class="feat-desc">단순히 감정을 분류하는 것을 넘어, NLP 심리학 모델을 기반으로 당신의 내면을 분석합니다. 현재 감정 상태에 딱 맞는 음악과 행동 요법을 제안하여 실질적인 힐링을 돕습니다.</p>
       </div>
-      <div class="feat-img-wrap">
-        <img src="일기장2.png" alt="일기장2" id="card4Img" style="transition: opacity 0.5s ease;">
+      <div class="feat-img-wrap scale-down" id="card5Wrap">
+        <img src="일기장2.png" alt="일기장2" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:1;">
+        <img src="감정분석1.png" alt="감정분석1" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:0;">
+        <img src="감정분석2.png" alt="감정분석2" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:0;">
       </div>
     </div>
 
     <div class="feat-row reveal">
+      <div class="feat-glow"></div>
       <div class="feat-text">
-        <p class="feat-num">05</p>
-        <p class="feat-tag">Multimodal Analysis</p>
+        <div class="feat-label">06 &nbsp;—&nbsp; Multimodal Analysis</div>
         <h3 class="feat-title">텍스트 너머의 심층 분석</h3>
         <p class="feat-desc">"괜찮아"라고 말했지만 목소리는 떨리고 있지 않나요? 텍스트와 음성 톤을 동시에 분석해 당신도 몰랐던 진짜 감정을 시각화된 리포트로 보여드립니다.</p>
       </div>
-      <div class="feat-img-wrap">
-        <img src="감정분석3.png" alt="분석 탭" id="card5Img" style="transition: opacity 0.5s ease;">
+      <div class="feat-img-wrap scale-down" id="card6Wrap">
+        <img src="감정분석3.png" alt="감정분석3" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:1;">
+        <img src="감정분석4.png" alt="감정분석4" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; transition:opacity 0.8s ease; opacity:0;">
       </div>
     </div>
   </div>
@@ -546,14 +625,14 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
     <div class="tech-header reveal">
       <p class="section-label">Our Core Technology</p>
       <h2>국내 유일,<br>음성 분석 멘탈케어 플랫폼</h2>
-      <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <strong style="color:rgba(255,255,255,0.85)">목소리의 떨림(Tone)</strong>까지 듣습니다.</p>
+      <p>기존 앱들은 텍스트만 읽지만, 디어로그는 <strong style="color:rgba(255,255,255,0.95); font-weight:500;">목소리의 떨림(Tone)</strong>까지 듣습니다.</p>
     </div>
 
     <div class="tech-cards">
       <div class="tech-card reveal">
         <div class="tech-icon">🧬</div>
         <h3>자체 모델 파인튜닝</h3>
-        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--lavender);font-weight:500">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
+        <p>한국어 감정 데이터셋을 기반으로 <span style="color:var(--lavender);font-weight:400">Wav2Vec 2.0 모델</span>을 직접 학습시켜 미세한 감정 변화까지 정밀하게 포착합니다.</p>
       </div>
       <div class="tech-card reveal">
         <div class="tech-icon">📊</div>
@@ -563,7 +642,7 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
       <div class="tech-card reveal">
         <div class="tech-icon">🎵</div>
         <h3>맞춤형 알고리즘</h3>
-        <p>감정 상태(Audio)와 대화 내용(Text)을 결합한 알고리즘으로, 단순 추천이 아닌 심리학적 근거를 바탕으로 설계된 알고리즘이 당신의 정서적 회복을 지원합니다.</p>
+        <p>단순 추천이 아닌, 심리학적 근거를 바탕으로 설계된 감정 상태(Audio)와 대화 내용(Text) 결합 알고리즘이 당신의 정서적 회복을 돕습니다.</p>
       </div>
     </div>
   </div>
@@ -574,7 +653,7 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
     <div class="reviews-header reveal">
       <p class="section-label">User Reviews</p>
       <h2>이미 많은 분들이<br>말하고 있어요</h2>
-      <p>베타 테스터 60명의 실제 목소리</p>
+      <p>베타 테스터 60명의 생생한 목소리</p>
     </div>
   </div>
   <div class="reviews-track-wrap">
@@ -643,38 +722,6 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
           <div><p class="review-name">박민준</p><p class="review-meta">28세 · 대학원생</p></div>
         </div>
       </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"늦은 밤에 혼자 있을 때 마음이 답답한데 아무한테도 연락하기가 미안하잖아요. 디어로그한테 털어놓고 나면 진짜 가벼워져요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(240,235,227,0.1);color:#e0d8cc">수아</div>
-          <div><p class="review-name">김수아</p><p class="review-meta">23세 · 대학생</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
-        <p class="review-text">"그림일기 기능이 너무 귀여워요. 오늘 제 감정이 연보라 하늘 아래 작은 행성으로 그려졌는데... 이상하게 위로가 됐어요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">하린</div>
-          <div><p class="review-name">최하린</p><p class="review-meta">22세 · 디자인 전공</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"회사 다니면서 감정을 그냥 눌러놓고 살았는데, 퇴근하고 5분만 얘기해도 하루가 정리되는 느낌이에요. 이게 진짜 필요한 앱이었구나 싶었어요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">준혁</div>
-          <div><p class="review-name">정준혁</p><p class="review-meta">31세 · 마케터</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"텍스트 감정 앱은 다 써봤는데 다 3주를 못 넘겼어요. 디어로그는 말하는 게 자연스러워서 그런지 아직도 쓰고 있어요. 리텐션 대박."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">예린</div>
-          <div><p class="review-name">윤예린</p><p class="review-meta">26세 · 기획자</p></div>
-        </div>
-      </div>
     </div>
 
     <div class="reviews-row reverse">
@@ -740,38 +787,6 @@ footer { padding: 48px; border-top: 1px solid rgba(255,255,255,0.06); display: f
         <div class="review-author">
           <div class="review-avatar" style="background:rgba(107,78,255,0.2);color:#b8a9ff">재원</div>
           <div><p class="review-name">한재원</p><p class="review-meta">29세 · 프리랜서</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span></div>
-        <p class="review-text">"음악 추천이 생각보다 너무 잘 맞아요. 슬플 때 막 신나는 노래 추천 같은 거 아니고, 진짜 그 감정에 맞는 분위기 음악이 나와서 신기했어요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(141,180,160,0.2);color:#8db4a0">지혜</div>
-          <div><p class="review-name">임지혜</p><p class="review-meta">27세 · 교육 종사자</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"한 달치 감정 리포트 봤는데 진짜 패턴이 보이더라고요. 월요일마다 불안감 수치가 높고 금요일에 확 낮아지는 거 보면서 저 스스로도 몰랐던 걸 알게 됐어요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(245,200,66,0.15);color:#f5c842">승현</div>
-          <div><p class="review-name">조승현</p><p class="review-meta">33세 · 개발자</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"친구한테 오늘 디어로그 써봤어? 물어봤더니 이미 쓰고 있더라고요. 요즘 주변에 쓰는 사람들이 늘고 있는 것 같아서 더 믿음직스러워요."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(107,78,255,0.18);color:#b8a9ff">나은</div>
-          <div><p class="review-name">백나은</p><p class="review-meta">26세 · 대학원생</p></div>
-        </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        <p class="review-text">"목소리로 감정을 읽는다는 게 처음엔 반신반의했는데, 정말로 제가 말하는 방식에서 뭔가를 잡아내더라고요. 기술이 신기하면서도 좀 무섭기도 해요 (좋은 의미로)."</p>
-        <div class="review-author">
-          <div class="review-avatar" style="background:rgba(141,180,160,0.18);color:#8db4a0">시우</div>
-          <div><p class="review-name">강시우</p><p class="review-meta">30세 · 연구원</p></div>
         </div>
       </div>
     </div>
@@ -893,26 +908,23 @@ if (!isMobile) {
 }
 
 /* ══════════════════════════════════════════
-   4. 메인 홈 화면 슬라이드 (진동 효과 포함)
+   4. 메인 홈 화면 슬라이드
 ══════════════════════════════════════════ */
-const heroPhoneImg = document.getElementById('heroPhoneImg');
-const heroImgs = ['홈화면.png', '전화1.png', '전화2.png'];
-let heroIdx = 0;
+const heroPhone = document.getElementById('heroPhone');
+if (heroPhone) {
+  const heroImgs = heroPhone.querySelectorAll('img');
+  let heroIdx = 0;
 
-if (heroPhoneImg) {
   setInterval(() => {
-    heroPhoneImg.classList.remove('ringing');
-    heroPhoneImg.style.opacity = '0';
+    heroPhone.classList.remove('ringing');
+    heroImgs[heroIdx].style.opacity = '0';
     
-    setTimeout(() => {
-      heroIdx = (heroIdx + 1) % heroImgs.length;
-      heroPhoneImg.src = heroImgs[heroIdx];
-      heroPhoneImg.style.opacity = '1';
-      
-      if (heroImgs[heroIdx] === '전화1.png') {
-        heroPhoneImg.classList.add('ringing');
-      }
-    }, 500);
+    heroIdx = (heroIdx + 1) % heroImgs.length;
+    heroImgs[heroIdx].style.opacity = '1';
+    
+    if (heroImgs[heroIdx].getAttribute('src') === '전화1.png') {
+      heroPhone.classList.add('ringing');
+    }
   }, 3500);
 }
 
@@ -1045,38 +1057,24 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 /* ══════════════════════════════════════════
-   10. CARD 4 & 5 IMAGE CYCLE
+   10. CARD IMAGE CYCLE
 ══════════════════════════════════════════ */
-const card4Img = document.getElementById('card4Img');
-// 카드 4 이미지 순서: 일기장2 -> 감정분석1 -> 감정분석2
-const card4Imgs = ['일기장2.png', '감정분석1.png', '감정분석2.png'];
-let c4Idx = 0;
-
-if (card4Img) {
+function setupFadeSlider(wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  const imgs = wrap.querySelectorAll('img');
+  if (imgs.length <= 1) return;
+  
+  let currentIdx = 0;
   setInterval(() => {
-    card4Img.style.opacity = '0';
-    setTimeout(() => {
-      c4Idx = (c4Idx + 1) % card4Imgs.length;
-      card4Img.src = card4Imgs[c4Idx];
-      card4Img.style.opacity = '1';
-    }, 500);
+    imgs[currentIdx].style.opacity = '0';
+    currentIdx = (currentIdx + 1) % imgs.length;
+    imgs[currentIdx].style.opacity = '1';
   }, 3500);
 }
 
-const card5Img = document.getElementById('card5Img');
-// 카드 5 이미지 순서: 감정분석3 -> 감정분석4
-let isImg3 = true;
-
-if (card5Img) {
-  setInterval(() => {
-    card5Img.style.opacity = '0';
-    setTimeout(() => {
-      isImg3 = !isImg3;
-      card5Img.src = isImg3 ? '감정분석3.png' : '감정분석4.png';
-      card5Img.style.opacity = '1';
-    }, 500);
-  }, 3500);
-}
+setupFadeSlider('card5Wrap');
+setupFadeSlider('card6Wrap');
 </script>
 </body>
 </html>
